@@ -1,7 +1,7 @@
 
 
 import os
-path = "cd /Desktop/vagrant/Eecs485/p1/"
+path = "cd /Desktop/vagrant/Eecs485/p3/"
 dirs = os.listdir(path)
 
 
