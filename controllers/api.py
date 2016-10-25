@@ -1,61 +1,12 @@
 from flask import *
 from extensions import *
 from config import *
-import os
+import hashlib
+import uuid
+import os#possibly delete
 
 api = Blueprint('api', __name__, template_folder='templates', url_prefix='/gu4wdnfe/p3')
 
-@api.route("/api/v1/user", methods=['GET','POST','PUT'])
-def userApi():
-	
-	db = connect_to_database()
-	cur = db.cursor()
-
-	if request.method == "GET":
-		if 'username' in session:
-			current_username = session['username']
-			cur.execute("SELECT * FROM user WHERE username = %s", [current_username])
-			query = cur.fetchall()
-			firstname = query[0]['firstname']
-			lastname = query[0]['lastname']
-			email = query[0]['email']
-
-			userDict = {
-				"username": current_username,
-				"firstname": firstname,
-				"lastname": lastname,
-				"email": email
-			}
-
-			return jsonify(userDict)
-
-
-	elif request.method == "POST":
-		#have to insert error checking, is this dealt with within
-		#the HTML error tags or here or javascript? Implementation
-		#finished for no errors, most likely post error code
-
-		username = request.form.get('username')
-		firstname = request.form.get('firstname')
-		lastname = request.form.get('lastname')
-		password1 = request.form.get('password1')
-		password2 = request.form.get('password2')
-		email = request.form.get('email')
-
-		userDict = {
-
-		}
-
-		return jsonify(userDict)
-
-
-	else:
-		userDict = {
-
-		}
-
-		return jsonify(userDict)
-		# deal with put request
 
 @api.route('/api/v1/login', methods=['POST'])
 def login_route():
@@ -66,38 +17,49 @@ def login_route():
 	print "username inputted: " + username;
 	password = request.form['password'];
 	print "password inputted: " + password;
+	if username is None or password is None:
+		return jsonify(error="You did not provide the necessary fields"),422
 
+	entered_user = username
+	entered_pass = password
+	
+	db = connect_to_database()
+	cur = db.cursor()
+	cur.execute('SELECT password FROM user WHERE username = %s', [username])
+	usernameResult = cur.fetchall()
 
-
-	#check if valid function
-	#errorType = "invalid username";
-	if True:
-		return jsonify(username=username,password=password)
+	if not bool(usernameResult):
+		print "username doesnt exist"
+		JSONError = {
+						"errors":	[
+ 										{
+											"message": "Username does not exist"
+    									}
+  									]
+					}
+		return jsonify(JSONError), 404
 	else:
-		return jsonify({'error': errorType})
+		sqlPassword = usernameResult[0]['password']
+		mytuple = sqlPassword.rsplit('$',2)
+		algorithm = mytuple[0]    
+		salt = mytuple[1] 
+		m = hashlib.new(algorithm)
+		m.update(salt + password)
+		password_hash = m.hexdigest()
+		final_password = "$".join([algorithm,salt,password_hash])
 
-@api.route('/api/v1/logout', methods=["POST"])
-def logout_route():
-	
-	if request.method == "POST":
-		print "Made it inside logout"
-		#deal with post request
+		if final_password == sqlPassword:
+			print "password is correct, logging in"
+			session['username'] = username
+			return jsonify(username=username,password=password)
+		else:
+			print "incorrect password"
+			return jsonify(error="Password is incorrect for the specified username"),422
 
-@api.route('/api/v1/album/<albumid>', methods=["GET"])
-def album_route():
-	
-	if request.method == "GET":
-		print "Made it inside album"
-		#deal with get request
-	
-@api.route('/api/v1/pic/<picid>', methods=["GET","PUT"])
-def pic_route():
-	
-	if request.method == "GET":
-		print "Made it inside GET"
-		#deal with get request
-	
-	elif request.method == "PUT":
-		print "MAde it inside final PUT"
-		#deal with put request
-			
+	return jsonify(error="Reached end of route")
+
+
+
+
+
+
