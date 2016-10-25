@@ -7,7 +7,7 @@ from flask import Flask, session, redirect, url_for, escape, request
 main = Blueprint('main', __name__, template_folder='templates')
 
 
-@main.route('/gu4wdnfe/p2/')
+@main.route('/gu4wdnfe/p3/')
 def main_route():
 	
 	db = connect_to_database()
@@ -28,18 +28,18 @@ def main_route():
 	my_albums = []
 	if 'username' in session:
 		logged_in = True
-		username = session['username']
-		cur.execute("SELECT * FROM user WHERE username = %s",[username])
+		current_username = session['username']
+		cur.execute("SELECT * FROM user WHERE username = %s",[current_username])
 		query = cur.fetchall()
 		firstname = query[0]['firstname']
 		lastname = query[0]['lastname']
-		cur.execute("SELECT * FROM album where username = %s and access = 'private'", [username])
+		cur.execute("SELECT * FROM album where username = %s and access = 'private'", [current_username])
 		my_albums = cur.fetchall()
-		cur.execute("SELECT * FROM AlbumAccess where username = %s", [username])
+		cur.execute("SELECT * FROM AlbumAccess where username = %s", [current_username])
 		album_ids = cur.fetchall()
 		for album_id in album_ids:
-			album_id = album_id['albumid']
-			cur.execute("SELECT * FROM album where albumid = %s", [albumid])
+			my_album_id = album_id['albumid']
+			cur.execute("SELECT * FROM album where albumid = %s", [my_album_id])
 			priv = cur.fetchall()
 			priv_album = priv[0]
 			priv_albums.append(priv_album)

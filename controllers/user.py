@@ -9,7 +9,7 @@ import os
 
 
 
-user = Blueprint('user', __name__, template_folder='templates', url_prefix='/gu4wdnfe/p2')
+user = Blueprint('user', __name__, template_folder='templates', url_prefix='/gu4wdnfe/p3')
 
 
 @user.route('/user', methods = ['GET','POST'])
@@ -19,7 +19,7 @@ def user_route():
 
 	if 'username' in session:
 		logged_in = True
-		return redirect("/gu4wdnfe/p2/user/edit")
+		return redirect("/gu4wdnfe/p3/user/edit")
 
 
 	db = connect_to_database()
@@ -46,33 +46,16 @@ def user_route():
 	email_invalid = False
 	username_characters = False
 	password1_characters = False
-	password1_invalid = False
+	password1_letternum = False
 	error = False
 
 
 	username = request.form.get('username')
-	if username is None:
-			username = ''
-
 	firstname = request.form.get('firstname')
-	if firstname is None:
-			firstname = ''
-
 	lastname = request.form.get('lastname')
-	if lastname is None:
-			lastname = ''
-
 	password1 = request.form.get('password1')
-	if password1 is None:
-			password1 = ''
-
 	password2 = request.form.get('password2')
-	if password2 is None:
-			password2 = ''
-
 	email = request.form.get('email')
-	if email is None:
-			email = ''
 
 	
 	#error checking:
@@ -83,22 +66,21 @@ def user_route():
 		users = cur.fetchall()
 		for sql_username in users:
 			sql_username = sql_username['username']
-			print "sql username", sql_username
 			if username.lower() == sql_username.lower():
 				username_not_unique = True
 				error = True
 
 
-		if re.match("^(?=.*[a-zA-z])(?=.*\d)", username):
+		if not re.match("^[\w\d_]*$", username):
 			username_characters = True
 			error = True
 
-		if re.match("^[\w\d_]*$", password1):
-			password1_characters = True
+		if not re.match("^(?=.*[a-zA-z])(?=.*\d)", password1):
+			password1_letternum = True
 			error = True
 
-		if re.match("^(?=.*[a-zA-z])(?=.*\d)", password1):
-			password1_invalid = True
+		if not re.match("^[\w\d_]*$", password1):
+			password1_characters = True
 			error = True
 
 		if len(username) < 3:
@@ -167,18 +149,14 @@ def user_route():
 
 			cur.execute("INSERT INTO user (username, firstname, lastname, password, email) VALUES (%s, %s, %s, %s, %s)", [username, firstname, lastname, final_password, email])
 
-			return redirect("/gu4wdnfe/p2/login/")
+			return redirect("/gu4wdnfe/p3/login")
 
-	# if username_blank == False:
-	# 	errorMessage += "username may not be left blank\n\n"
-	# if firstname_blank == False:
-	# 	errorMessage += "firstname may not be left blank\n\n"
-	# if lastname_blank == False:
-	# 	errorMessage += "lastname may not be left blank\n\n"
-	# if password1_blank == False:
-	# 	errorMessage += "password1 may not be left blank\n\n"
-	# if email_blank == False:
-	# 	errorMessage += "email may not be left blank\n\n"
+
+	cur.execute('SELECT username FROM user')
+	results = cur.fetchall()
+
+	cur.execute("SELECT * FROM album WHERE access = 'public'")
+	pubalbums = cur.fetchall()
 
 
 	options = {
@@ -199,8 +177,10 @@ def user_route():
 		"password_mismatch": password_mismatch,
 		"email_invalid": email_invalid,
 		"username_characters": username_characters,
+		"password1_letternum": password1_letternum,
 		"password1_characters": password1_characters,
-		"password1_invalid": password1_invalid,
+		"pub_user_albums": pubalbums,
+		"results": results,
 		"hostValue": host,
 		"portValue": port
 	}
@@ -215,11 +195,20 @@ def edit_user():
 	host = env['host']
 	port = env['port']
 
+
+	page_firstname = ""
+	page_lastname = ""
+	password = ""
+	password1 = ""
 	if 'username' in session:
 		logged_in = True
 		current_username = session['username']
+		cur.execute("SELECT * FROM user WHERE username = %s",[current_username])
+		query = cur.fetchall()
+		page_firstname = query[0]['firstname']
+		page_lastname = query[0]['lastname']
 	else:
-		return redirect("/gu4wdnfe/p2/user")
+		return redirect("/gu4wdnfe/p3/user")
 
 	firstname_long = False
 	lastname_long = False
@@ -228,63 +217,44 @@ def edit_user():
 	email_long = False
 	email_invalid = False
 	password1_characters = False
-	password1_invalid = False
+	password1_letternum = False
 	error = False
 
-	firstname = request.form.get('firstname')
-	if firstname is None:
-			firstname = ''
-
-	lastname = request.form.get('lastname')
-	if lastname is None:
-			lastname = ''
-
-	password1 = request.form.get('password1')
-	if password1 is None:
-			password1 = ''
-
+		
 	password2 = request.form.get('password2')
-	if password2 is None:
-			password2 = ''
-
-	email = request.form.get('email')
-	if email is None:
-			email = ''
-
 
 	#error checking:
 	if request.method == "POST":
-		field = request.form.get('field')
 
-		if field == "firstname":
-			print "where are we 3"
+		if request.form.get('firstname'):
+			firstname = request.form.get('firstname')
 			if len(firstname) > 20:
 				firstname_long = True
 				error = True
 
-		if field == "lasstname":
-			print "where are we 4"
+		if request.form.get('lastname'):
+			lastname = request.form.get('lastname')
 			if len(lastname) > 20:
 				lastname_long = True
 				error = True
 
-		if field == "password":
-			print "where are we 5"
+		if request.form.get('password1'):
+			password1 = request.form.get('password1')
 			if len(password1) < 8:
 				password_short = True
 				error = True
 			if password1 != password2:
 				password_mismatch = True
 				error = True
-			if re.match("^[\w\d_]*$", password1):
+			if not re.match("^(?=.*[a-zA-z])(?=.*\d)", password1):
+				password1_letternum = True
+				error = True
+			if not re.match("^[\w\d_]*$", password1):
 				password1_characters = True
 				error = True
-			if re.match("^(?=.*[a-zA-z])(?=.*\d)", password1):
-				password1_invalid = True
-				error = True
 
-		if field == "email":
-			print "where are we 6"
+		if request.form.get('email'):
+			email = request.form.get('email')
 			if len(email) > 40:
 				email_long = True
 				error = True
@@ -295,7 +265,6 @@ def edit_user():
 
 
 		if not error:
-			print "where are we 7"
 			#create hashed password:
 			algorithm = 'sha512'     
 			password = password1   
@@ -307,25 +276,35 @@ def edit_user():
 
 			final_password = "$".join([algorithm,salt,password_hash])
 
-			if field == "firstname":
+			if request.form.get('firstname'):
 				cur.execute("UPDATE user SET firstname = %s WHERE username = %s", [firstname, current_username])
-			if field == "lastname":
+			if request.form.get('lastname'):
 				cur.execute("UPDATE user SET lastname = %s WHERE username = %s", [lastname, current_username])
-			if field == "password":
+			if request.form.get('password1'):
 				cur.execute("UPDATE user SET password = %s WHERE username = %s", [final_password, current_username])
-			if field == "email":
+			if request.form.get('email'):
 				cur.execute("UPDATE user SET email = %s WHERE username = %s", [email, current_username])
+
+			return redirect("/gu4wdnfe/p3/user/edit")
 
 	cur.execute("SELECT * FROM album WHERE access = 'public'")
 	pubalbums = cur.fetchall()
 	cur.execute('SELECT username FROM user')
 	results = cur.fetchall()
 
+	cur.execute('SELECT username FROM user')
+	results = cur.fetchall()
+
+	cur.execute("SELECT * FROM album WHERE access = 'public'")
+	pubalbums = cur.fetchall()
+
 
 	options = {
 		"new_user": False,
 		"edit_user": True,
 		"logged_in": logged_in,
+		"firstname": page_firstname,
+		"lastname": page_lastname,
 		"firstname_long": firstname_long,
 		"lastname_long": lastname_long,
 		"password_short": password_short,
@@ -333,7 +312,7 @@ def edit_user():
 		"password_mismatch": password_mismatch,
 		"email_invalid": email_invalid,
 		"password1_characters": password1_characters,
-		"password1_invalid": password1_invalid,
+		"password1_letternum": password1_letternum,
 		"pub_user_albums": pubalbums,
 		"results": results,
 		"hostValue": host,

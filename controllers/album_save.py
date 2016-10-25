@@ -6,7 +6,7 @@ import hashlib
 
 album = Blueprint('album', __name__, template_folder='templates')
 
-@album.route('/gu4wdnfe/p2/album/edit', methods=['GET', 'POST'])
+@album.route('/gu4wdnfe/p3/album/edit', methods=['GET', 'POST'])
 def album_edit_route():
 
 	UPLOAD_FOLDER = '/static/images'
@@ -81,7 +81,7 @@ def album_edit_route():
 
 	return render_template("album.html", **options)
 
-@album.route('/gu4wdnfe/p2/album', methods=['GET', 'POST'])
+@album.route('/gu4wdnfe/p3/album', methods=['GET', 'POST'])
 def album_route():
 
 	albumid = request.args.get('albumid')

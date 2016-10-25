@@ -2,26 +2,82 @@ from flask import *
 from extensions import *
 from config import *
 
-pic = Blueprint('pic', __name__, template_folder='templates', url_prefix='/gu4wdnfe/p2')
+pic = Blueprint('pic', __name__, template_folder='templates', url_prefix='/gu4wdnfe/p3')
 
 @pic.route('/pic', methods = ['GET', 'POST'])
 def pic_route():
 
 	logged_in = False
 
+	current_username = ""
+	db = connect_to_database()
+	cur = db.cursor()
+	firstname = ""
+	lastname = ""
 	if 'username' in session:
 		logged_in = True
 		current_username = session['username']
+		cur.execute("SELECT * FROM user WHERE username = %s",[current_username])
+		query = cur.fetchall()
+		firstname = query[0]['firstname']
+		lastname = query[0]['lastname']
 
+	if current_username == "":
+		logged_in = False
+
+	grant_access = False
+	owner_rights = False
+	caption_on = False
+	public = False
+	owner = ""
+	album_access = 'private'
+
+	host = env['host']
+	port = env['port']
+	
 
 	picid = request.args.get('picid')
 
-	db = connect_to_database()
-	cur = db.cursor()
 	cur.execute("SELECT picid FROM photo WHERE picid = %s" , [picid])
 	invalidUser = cur.fetchall()
 	if not bool(invalidUser):
 		abort(404)
+
+	
+
+	cur.execute("SELECT albumid from contain where picid = %s", [picid])
+	albumid = cur.fetchall()
+	albumid = albumid[0]['albumid']
+
+
+	cur.execute("SELECT username, access from album where albumid = %s", [albumid])
+	allowed_access = cur.fetchall()
+	album_access = allowed_access[0]['access']
+	owner = allowed_access[0]['username']
+
+	if album_access == "public":
+		grant_access = True
+		public = True
+	if owner == current_username:
+		grant_access = True
+		owner_rights = True
+	else:
+		cur.execute("SELECT username from AlbumAccess where albumid = %s", ['albumid'])
+		allowed_users = cur.fetchall()
+		for user in allowed_users:
+			user = user['username']
+			if current_username == user:
+				grant_access = True
+
+	if (logged_in == True) & (grant_access == False):
+		abort(403)
+
+	if (logged_in == False) & (public == False):
+		return redirect("/gu4wdnfe/p3/login")
+
+	
+
+	
 		
 	cur.execute('SELECT username FROM user')
 	results = cur.fetchall()
@@ -63,9 +119,15 @@ def pic_route():
 
 
 
-	cur.execute("SELECT sequencenum FROM contain where picid = %s", [picid])
-	sequencenum = cur.fetchall()
-	sequencenum = sequencenum[0]['sequencenum']
+	cur.execute("SELECT sequencenum, caption FROM contain where picid = %s", [picid])
+	sql_results = cur.fetchall()
+	sequencenum = sql_results[0]['sequencenum']
+	current_caption = sql_results[0]['caption']
+
+
+	if current_caption is not None:
+		caption_on = True
+	
 
 
 	try:
@@ -91,13 +153,27 @@ def pic_route():
 	pubalbums = cur.fetchall()
 	cur.execute('SELECT username FROM user')
 	results = cur.fetchall()
-	
+
+
+	new_caption = current_caption
+	if request.method == "POST":
+		new_caption = request.form.get('new_caption')
+		cur.execute("UPDATE contain SET caption = %s WHERE picid = %s", [new_caption, picid])
+		cur.execute("UPDATE album SET lastupdated = CURRENT_TIMESTAMP WHERE albumid = %s", [albumid])
+
+
+
 
 	options = {
 		"last": last,
 		"first": first,
 		"users": True,
+		"firstname": firstname,
+		"lastname": lastname,
+		"owner_rights": owner_rights,
 		"results": results,
+		"caption": new_caption,
+		"caption_on": caption_on,
 		"albumid": albumid,
 		"username": username,
 		"prev": prev_pic,
@@ -112,7 +188,6 @@ def pic_route():
 		"portValue": port,
 		"pub_user_albums": pubalbums
 	}
-
 
 	return render_template("pic.html", **options)
 

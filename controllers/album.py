@@ -5,7 +5,7 @@ import os
 
 import hashlib
 
-album = Blueprint('album', __name__, template_folder='templates', url_prefix='/gu4wdnfe/p2')
+album = Blueprint('album', __name__, template_folder='templates', url_prefix='/gu4wdnfe/p3')
 
 @album.route('/album/edit', methods=['GET', 'POST'])
 
@@ -24,27 +24,72 @@ def album_edit_route():
 	db = connect_to_database()
 	cur = db.cursor()
 
-	if method == "private":
-		cur.execute("UPDATE album SET access = 'private' WHERE albumid = %s",[albumid])
-		cur.execute("UPDATE album SET lastupdated = current_timestamp WHERE albumid = %s",[albumid])
-
-	if method == "public":
-		cur.execute("UPDATE album SET access = 'public' WHERE albumid = %s",[albumid])
-		cur.execute("DELETE FROM AlbumAccess WHERE albumid = %s",[albumid])
-		cur.execute("UPDATE album SET lastupdated = current_timestamp WHERE albumid = %s",[albumid])
 
 	logged_in = False
+
+	current_username = ""
+
+	firstname = ""
+	lastname = ""
 
 	if 'username' in session:
 		logged_in = True
 		current_username = session['username']
+		cur.execute("SELECT * FROM user WHERE username = %s",[current_username])
+		query = cur.fetchall()
+		firstname = query[0]['firstname']
+		lastname = query[0]['lastname']
 
+	if current_username == "":
+		logged_in = False
+
+	if logged_in == False:
+		abort(403)
+
+		
+
+	caption_on = False
+	owner = ""
+	album_access = 'private'
+
+
+	host = env['host']
+	port = env['port']
 	
+
+	cur.execute("SELECT * FROM album WHERE albumid = %s" , [albumid])
+	invalidUser = cur.fetchall()
+	if not bool(invalidUser):
+		abort(404)
+
+
+	cur.execute("SELECT username, access from album where albumid = %s", [albumid])
+	allowed_access = cur.fetchall()
+	album_access = allowed_access[0]['access']
+	owner = allowed_access[0]['username']
+
+	if (current_username != owner):
+		abort(403)
+	else:
+		owner_rights = True
+
+
+	if method == "access":
+		tempmethod = request.form.get('access')
+		if tempmethod == "private":
+			cur.execute("UPDATE album SET access = 'private' WHERE albumid = %s",[albumid])
+			cur.execute("UPDATE album SET lastupdated = current_timestamp WHERE albumid = %s",[albumid])
+
+		if tempmethod == "public":
+			cur.execute("UPDATE album SET access = 'public' WHERE albumid = %s",[albumid])
+			cur.execute("DELETE FROM AlbumAccess WHERE albumid = %s",[albumid])
+			cur.execute("UPDATE album SET lastupdated = current_timestamp WHERE albumid = %s",[albumid])
+
+
 
 	cur.execute("SELECT albumid FROM album WHERE albumid = %s" , [albumid])
 	invalidUser = cur.fetchall()
 	if not bool(invalidUser):
-		#print albumid#delete later
 		abort(404)
 
 	cur.execute('SELECT username FROM user')
@@ -53,22 +98,54 @@ def album_edit_route():
 	cur.execute("SELECT * FROM album WHERE access = 'public'")
 	pubalbums = cur.fetchall()
 
-	host = env['host']
-	port = env['port']
+
+	cur.execute("SELECT picid, sequencenum FROM contain WHERE albumid = %s" , [albumid])
+	pics = cur.fetchall()
+	pic_format = []
+	all_captions = []
+	my_caption = ""
+	new_edit = []
+	for pic in pics:
+		cur.execute("SELECT picid, format, date FROM photo WHERE picid = %s" , [pic['picid']])
+		edit = cur.fetchall()
+
+		cur.execute("SELECT caption FROM contain WHERE picid = %s" , [pic['picid']])
+		captions = cur.fetchall()
+		my_caption = captions[0]['caption']
+
+		edit[0]['caption'] = my_caption
+		new_edit = edit[0]
+
+		pic_format.append(new_edit)
+
+	if my_caption is not None:
+		caption_on = True
+	if len(my_caption) == 0:
+		caption_on = False
+
+		
+
+	cur.execute("SELECT title FROM album WHERE albumid = %s" , [albumid])
+	title = cur.fetchall()
+	title = title[0]['title']
+
+
 
 
 	cur.execute("SELECT sequencenum FROM contain ORDER BY sequencenum DESC")
 	sequencenum = cur.fetchall()
 	sequencenum = sequencenum[0]['sequencenum']
 
-	
-	if method == "addUsername":
-		usernameEntered = request.form.get('usernameEntered')
+
+
+	if method == "grant":
+		usernameEntered = request.form.get('username')
 		cur.execute("INSERT INTO AlbumAccess(albumid,username) VALUES (%s,%s)",[albumid,usernameEntered])
 
 	if method == "revoke":
-		usernameDeleted = request.form.get('usernameRevoked')
+		usernameDeleted = request.form.get('username')
 		cur.execute("DELETE FROM AlbumAccess WHERE username = %s", [usernameDeleted])
+
 
 	if method == "add":
 		albumid = request.form.get('albumid')
@@ -103,48 +180,29 @@ def album_edit_route():
 
 
 	if method == "delete":
-		#print 'HAPPENED'
 		picid = request.form.get('picid')
 		albumid = request.form.get('albumid')
 		cur.execute("SELECT format FROM photo WHERE picid = %s", [picid])
 		pic_format = cur.fetchall()
 		pic_format = pic_format[0]['format']
 
-		#print "pic format"
 
 		cur.execute("DELETE FROM contain WHERE picid = %s", [picid])
 
-		#print "delete from contain"
 		cur.execute("DELETE FROM photo WHERE picid = %s", [picid])
-		#print "delete from photo"
-		#print picid
+
 		os.remove(os.path.join('static/images/', picid + "." + pic_format))
-		#print "delete from folder"
 
 
-	cur.execute("SELECT picid, sequencenum FROM contain WHERE albumid = %s" , [albumid])
-	pics = cur.fetchall()
-	pic_format = []
-	for pic in pics:
-		#print "pic"
-		#print pic
-		cur.execute("SELECT picid, format FROM photo WHERE picid = %s" , [pic['picid']])
-		edit = cur.fetchall()
-		
-		new_edit = edit[0]
-		#print "new_edit"
-		#print new_edit
-		pic_format.append(new_edit)
-		#print "format"
-		#print pic_format
-
-
-	cur.execute("SELECT title FROM album where albumid = %s" , [albumid])
-	title_sql = cur.fetchall()
-	title = title_sql[0]['title']
 
 	cur.execute("SELECT * FROM AlbumAccess WHERE albumid = %s",[albumid])
 	usersWithAccess = cur.fetchall()
+
+	cur.execute("SELECT access FROM album WHERE albumid = %s",[albumid])
+	tempAccess = cur.fetchall()
+	isPrivate = False
+	if tempAccess[0]['access'] == 'private':
+		isPrivate = True
 
 
 	options = {
@@ -152,7 +210,12 @@ def album_edit_route():
 		"results": results,
 		"albumid": albumid,
 		"not_edit": False,
+		"firstname": firstname,
+		"lastname": lastname,
+		"owner": owner,
+		"owner_rights": owner_rights,
 		"pic_format": pic_format,
+		"caption_on": caption_on,
 		"logged_in": logged_in,
 		"pics": pics,
 		"title": title,
@@ -160,7 +223,8 @@ def album_edit_route():
 		"portValue": port,
 		"edit": True,
 		"pub_user_albums": pubalbums,
-		"usersWithAccess": usersWithAccess
+		"usersWithAccess": usersWithAccess,
+		"private": isPrivate
 	}
 
 	return render_template("album.html", **options)
@@ -169,15 +233,24 @@ def album_edit_route():
 def album_route():
 
 	albumid = request.args.get('albumid')
-	print "albumid", albumid
+	db = connect_to_database()
+	cur = db.cursor()
+	
 
 	logged_in = False
+	caption_on = False
 
 	current_username = ""
 
+	firstname = ""
+	lastname = ""
 	if 'username' in session:
 		logged_in = True
 		current_username = session['username']
+		cur.execute("SELECT * FROM user WHERE username = %s",[current_username])
+		query = cur.fetchall()
+		firstname = query[0]['firstname']
+		lastname = query[0]['lastname']
 
 	if current_username == "":
 		logged_in = False
@@ -192,11 +265,13 @@ def album_route():
 
 	host = env['host']
 	port = env['port']
-	db = connect_to_database()
-	cur = db.cursor()
+	
 
+	cur.execute("SELECT * FROM album WHERE albumid = %s" , [albumid])
+	invalidUser = cur.fetchall()
+	if not bool(invalidUser):
+		abort(404)
 
-	print "albumid second time", albumid
 	cur.execute("SELECT username, access from album where albumid = %s", [albumid])
 	allowed_access = cur.fetchall()
 	album_access = allowed_access[0]['access']
@@ -209,7 +284,7 @@ def album_route():
 		grant_access = True
 		owner_rights = True
 	else:
-		cur.execute("SELECT username from AlbumAccess where albumid = %s", ['albumid'])
+		cur.execute("SELECT username from AlbumAccess where albumid = %s", [albumid])
 		allowed_users = cur.fetchall()
 		for user in allowed_users:
 			user = user['username']
@@ -218,21 +293,17 @@ def album_route():
 
 
 
-	if (logged_in == True) & (grant_access == False):
+	if (logged_in == True) and (grant_access == False):
 		abort(403)
 
 	
-	if (logged_in == False) & (public == False):
-		return redirect("/gu4wdnfe/p2/login")
+	if (logged_in == False) and (public == False):
+		return redirect("/gu4wdnfe/p3/login")
 
 
 
 
 
-	cur.execute("SELECT albumid FROM album WHERE albumid = %s" , [albumid])
-	invalidUser = cur.fetchall()
-	if not bool(invalidUser):
-		abort(404)
 
 	cur.execute('SELECT username FROM user')
 	results = cur.fetchall()
@@ -247,12 +318,10 @@ def album_route():
 	pic_format = []
 	all_captions = []
 	new_edit = []
+	my_caption = ""
 	for pic in pics:
 		cur.execute("SELECT picid, format, date FROM photo WHERE picid = %s" , [pic['picid']])
 		edit = cur.fetchall()
-		print "edit", edit
-		print "edit[0]", edit[0]
-		print "edit[0]['format']", edit[0]['format']
 
 		cur.execute("SELECT caption FROM contain WHERE picid = %s" , [pic['picid']])
 		captions = cur.fetchall()
@@ -261,12 +330,13 @@ def album_route():
 		edit[0]['caption'] = my_caption
 		new_edit = edit[0]
 
-		print "edit[0]['caption']", edit[0]['caption']
-
 		pic_format.append(new_edit)
-		print "PICID", pic['picid']
-		print "FORMAT", new_edit['format']
 
+	
+	if my_caption is not None:
+		caption_on = True
+	if len(my_caption) == 0:
+		caption_on = False
 		
 
 	cur.execute("SELECT title FROM album WHERE albumid = %s" , [albumid])
@@ -278,10 +348,12 @@ def album_route():
 	options = {
 		"users": True,
 		"results": results,
+		"firstname": firstname,
+		"lastname": lastname,
 		"owner": owner,
 		"owner_rights": owner_rights,
-		"captions": captions,
 		"albumid": albumid,
+		"caption_on": caption_on,
 		"not_edit": True,
 		"pic_format": pic_format,
 		"pics": pics,

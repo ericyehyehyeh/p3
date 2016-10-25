@@ -6,7 +6,7 @@ import uuid
 
 
 
-login = Blueprint('login', __name__, template_folder='templates', url_prefix='/gu4wdnfe/p2')
+login = Blueprint('login', __name__, template_folder='templates', url_prefix='/gu4wdnfe/p3')
 
 @login.route('/login', methods = ['GET','POST'])
 def login_route():
@@ -61,7 +61,7 @@ def login_route():
 
 			if final_password == sqlPassword:
 				session['username'] = username
-				return redirect("/gu4wdnfe/p2/")
+				return redirect("/gu4wdnfe/p3")
 			else:
 				#errorMessage = "Password is incorrect for the specified username"
 				nonexistent_password = True
@@ -103,8 +103,8 @@ def login_route():
 		"no_password":  no_password
 	}
 	
-	if redirectToHome:
-		return redirect("/gu4wdnfe/p2/")
-	else:
-		return render_template("login.html", **options)
+	#if redirectToHome:
+	#	return redirect("/gu4wdnfe/p3/")
+	#else:
+	return render_template("login.html", **options)
 

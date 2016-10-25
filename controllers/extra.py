@@ -9,7 +9,7 @@ cur = db.cursor()
 
 main = Blueprint('main', __name__, template_folder='templates')
 
-@main.route('/gu4wdnfe/p2/')
+@main.route('/gu4wdnfe/p3/')
 def main_route():
     return render_template('index.html')
 
@@ -28,7 +28,7 @@ def connect_to_database():
   
 db = extensions.connect_to_database()
 
-@main.route('/gu4wdnfe/p2/hello')
+@main.route('/gu4wdnfe/p3/hello')
 def test_route():
   db = extensions.connect_to_database()
   cur = db.cursor()

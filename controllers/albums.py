@@ -3,33 +3,36 @@ from extensions import *
 from config import *
 import os
 
-albums = Blueprint('albums', __name__, template_folder='templates', url_prefix='/gu4wdnfe/p2')
+albums = Blueprint('albums', __name__, template_folder='templates', url_prefix='/gu4wdnfe/p3')
 
 @albums.route('/albums/edit', methods = ['GET', 'POST'])
 def albums_edit_route():
 
-	print "EDIT VIEW"
 
 	method = request.form.get('op')
-
+	db = connect_to_database()
+	cur = db.cursor()
 	logged_in = False
+	firstname = ""
+	lastname = ""
 	if 'username' in session:
 		logged_in = True
 		current_username = session['username']
+		cur.execute("SELECT * FROM user WHERE username = %s",[current_username])
+		query = cur.fetchall()
+		firstname = query[0]['firstname']
+		lastname = query[0]['lastname']
+	else:
+		return redirect("/gu4wdnfe/p3/login")
 
 
-	db = connect_to_database()
-	cur = db.cursor()
+	
 	cur.execute('SELECT username FROM user')
 	results = cur.fetchall()
 
 	cur.execute("SELECT * FROM album WHERE access = 'public'")
 	pubalbums = cur.fetchall()
 
-	cur.execute("SELECT username FROM user WHERE username = %s" , [current_username])
-	invalidUser = cur.fetchall()
-	if not bool(invalidUser):
-		abort(404)
 	
 	host = env['host']
 	port = env['port']
@@ -48,8 +51,6 @@ def albums_edit_route():
 
 		for photo in del_photos:
 			picid = photo['picid']
-			print "picid"
-			print picid
 
 			cur.execute("SELECT format FROM photo WHERE picid = %s", [picid])
 
@@ -73,6 +74,8 @@ def albums_edit_route():
 	options = {
 		"edit": True,
 		"not-edit": False,
+		"firstname": firstname,
+		"lastname": lastname,
 		"results": results,
 		"albums": albums,
 		"user_name": current_username,
@@ -90,16 +93,28 @@ def albums_edit_route():
 @albums.route('/albums', methods=['GET', 'POST'])
 def albums_route():
 
-	print "ALBUMS VIEW"
 	users_page = request.args.get('username')
 
 	db = connect_to_database()
 	cur = db.cursor()
 
 	logged_in = False
+	firstname = ""
+	lastname = ""
 	if 'username' in session:
 		logged_in = True
 		current_username = session['username']
+		cur.execute("SELECT * FROM user WHERE username = %s",[current_username])
+		query = cur.fetchall()
+		firstname = query[0]['firstname']
+		lastname = query[0]['lastname']
+
+
+	if users_page is not None:
+		cur.execute("SELECT username FROM user WHERE username = %s" , [users_page])
+		invalidUser = cur.fetchall()
+		if not bool(invalidUser):
+			abort(404)
 
 	username = request.args.get('username')
 
@@ -123,23 +138,13 @@ def albums_route():
 	cur.execute("SELECT * FROM album WHERE access = 'public'")
 	pubalbums = cur.fetchall()
 
-	public = False
-
-	if (logged_in == False):
-		cur.execute("SELECT access FROM album where username = %s", [users_page])
-		albums_access = cur.fetchall()
-		for access in albums_access:
-			access = access['access']
-			if access == "public":
-				public = True
-
-	if (public == False) & (logged_in == False):
-		return redirect("/gu4wdnfe/p2/")
 
 
 	options = {
 		"results": results,
 		"logged_in": logged_in,
+		"firstname": firstname,
+		"lastname": lastname,
 		"albums": albums,
 		"user_name": user_name,
 		"hostValue": host,
