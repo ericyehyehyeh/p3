@@ -5,8 +5,10 @@
 {% block center %}
 	<h1>Login</h1>
 
-	<form action="/gu4wdnfe/p2/login" method="post">
-        <input id="login_username_input" type="text" placeholder="Username" name="username" value="">
+	<!--<form action="/gu4wdnfe/p3/login" method="post">-->
+    <form action="" id="loginForm" method="post">
+        <input id="login_username_input" type="text" placeholder="Username" name="username">
+
 		{% if nonexistent_username %}
         <h6><p class="error">Username does not exist</p></h6>
         {% endif %}
@@ -14,7 +16,7 @@
         <h6><p class="error">Username may not be left blank</p></h6>
         {% endif %}
 
-        <input id="login_password_input" type="password" placeholder="Password" name="password" value="">
+        <input id="login_password_input" type="password" placeholder="Password" name="password">
         {% if nonexistent_password %}
         <h6><p  class="error">Password is incorrect for the specified username</p></h6>
         {% endif %}
@@ -25,8 +27,11 @@
         <input id="login_submit" type="submit" value="Login">
     </form>
 
+    <script type="text/javascript" src="/static/js/login.js"></script>
+
     {% if failed %}
         <br><a> {{errorMessage}}</a>
     {% endif %}
+    
 
 {% endblock %}
