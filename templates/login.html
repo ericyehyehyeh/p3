@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block center %}
+	<h1>Login</h1>
+
+	<form action="/gu4wdnfe/p2/login" method="post">
+        <input id="login_username_input" type="text" placeholder="Username" name="username" value="">
+		{% if nonexistent_username %}
+        <h6><p class="error">Username does not exist</p></h6>
+        {% endif %}
+        {% if no_username %}
+        <h6><p class="error">Username may not be left blank</p></h6>
+        {% endif %}
+
+        <input id="login_password_input" type="password" placeholder="Password" name="password" value="">
+        {% if nonexistent_password %}
+        <h6><p  class="error">Password is incorrect for the specified username</p></h6>
+        {% endif %}
+        {% if no_password %}
+        <h6><p  class="error">Password may not be left blank</p></h6>
+        {% endif %}
+
+        <input id="login_submit" type="submit" value="Login">
+    </form>
+
+    {% if failed %}
+        <br><a> {{errorMessage}}</a>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,199 @@
+<!DOCTYPE html "-//W3C//DTD HTML 4.01//EN">
+
+<html lang = "en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" href="/gu4wdnfe/p3/static/css/style.css" />
+
+
+		<title>Eecs485</title>
+		
+		
+
+		<style type="text/css">
+		
+			body {
+				margin:0;
+				padding:0;
+				font-family: Sans-Serif;
+				line-height: 1.5em;
+			}
+			
+			#header {
+				background: #C5F9F5;
+				height: 100px;
+			}
+			
+			#header h1 {
+				margin: 0;
+				padding-top: 15px;
+			}
+			
+			main {
+				padding-bottom: 10010px;
+				margin-bottom: -10000px;
+				float: left;
+				width: 100%;
+			}
+			
+			#nav {
+				padding-bottom: 10010px;
+				margin-bottom: -10000px;
+				float: left;
+				width: 280px;
+				margin-left: -100%;
+				background: #66D6CC;
+				font-size:85%;
+			}
+			
+			#footer {
+				clear: left;
+				width: 100%;
+				background: #C5F9F5;
+				text-align: center;
+				padding: 4px 0;
+			}
+	
+			#wrapper {
+				overflow: hidden;
+			}
+						
+			#content {
+				margin-left: 280px; /* Same as 'nav' width */
+			}
+			
+			.innertube {
+				margin: 10px; /* Padding for content */
+				margin-top: 0;
+			}
+		
+			p {
+				color: #555;
+			}
+	
+			nav ul {
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+			}
+			
+			nav ul a {
+				color: darkgreen;
+				text-decoration: none;
+			}
+		
+		</style>
+	
+	</head>
+	
+	<body>
+
+
+		<header id="header">
+			<div class="innertube">
+			
+				<h1>Eecs 485
+				<br/>
+					{% if logged_in %}
+					<h3>Logged in as {{firstname}} {{lastname}}</h3>
+					{% endif %}
+				</h1>
+
+			</div>
+		</header>
+		
+
+		<div id="wrapper">
+		
+			<main>
+				<div id="content">
+					<div class="innertube">
+					
+					
+
+					{% block center %}
+					<h1>Home</h1>
+					
+					
+					{% if home %}
+
+						<p class = "center"> Welcome! This website is a great way to save, organize, and share your photos! Feel free to upload and delete as many as you photos and albums as you please.</p>	
+
+						{% if not logged_in %}
+						<li><a id="home_login" href="/gu4wdnfe/p3/login">Login</a></li>
+						</br>
+						<li><a id="home_user_create" href="/gu4wdnfe/p3/user">Create An Account</a></li>
+						{% endif %}
+				
+					{% endif %}
+					{% if logged_in %}
+						{% for result in pub_user_albums %}
+							<li><a id="album_{{result['albumid']}}_link" href="/gu4wdnfe/p3/album?albumid={{result['albumid']}}">{{result['title']}}</a></li>
+						{% endfor %}
+
+						{% for albums in my_albums %}
+							<li><a href="/gu4wdnfe/p3/album?albumid={{albums['albumid']}}">{{albums['title']}}</a></li>
+						{% endfor %}
+
+						{% for albums in private_albums %}
+							<li><a href="/gu4wdnfe/p3/album?albumid={{albums['albumid']}}">{{albums['title']}}</a></li>
+						{% endfor %}
+
+					{% endif %}
+
+					{% endblock %}
+
+
+					</div>
+				</div>
+			</main>
+			
+			<nav id="nav">
+				<div class="innertube">
+					<h1>Table of Contents</h1>
+					<ul>
+						<li><a id="nav_home" href="/gu4wdnfe/p3">Nav Home</a></li>
+
+						{% if logged_in %}
+							<li><a id="nav_edit" href="/gu4wdnfe/p3/user/edit">Edit Account</a></li>
+							<li><a id="nav_albums" href="/gu4wdnfe/p3/albums">My Albums</a></li>
+							<form action="/gu4wdnfe/p3/logout" method="POST">
+        					<input id="nav_logout" type="submit" value = "logout">
+    						</form>
+						{% endif %}
+
+
+								<h1> Public Albums:</h1>
+							{% for result in pub_user_albums %}
+								<a id="album_{{result['albumid']}}_link" href="/gu4wdnfe/p3/album?albumid={{result['albumid']}}">{{result['title']}}</a><br>
+							{% endfor %}
+								<h1>Username Albums</h1>
+							{% for result in results %}
+								<a href="/gu4wdnfe/p3/albums?username={{result['username']}}">{{result['username']}}'s Public Albums</a><br>
+							{% endfor %}
+						
+
+
+						
+					</ul>
+						
+				</div>
+			</nav>
+		
+		</div>
+
+
+
+		
+		<footer id="footer">
+			<div class="innertube">
+				<p>University of Michigan - Eecs 485 - Project 1</p>
+				<p>By: Anika Kao, George Swirski, and Jack Moore</p>
+			</div>
+		</footer>
+
+		<script type="text/javascript" src="/static/js/main.js"></script>
+	
+	</body>
+</html>
+

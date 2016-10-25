@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}User Page{% endblock %}
+
+{% block center %}
+	{% if new_user %}
+	<h1>Create An Account</h1>
+	{% endif %}
+	{% if edit_user %}
+	<h1>Edit Your Account</h1>
+	{% endif %}
+
+	</br>
+
+	{% if new_user %}
+		<form action="/gu4wdnfe/p3/user" method="POST">
+
+        	<input id="new_username_input" type="text" placeholder="Username" name="username" value="">
+        	{% if username_blank %}
+        	<h6><p class="error">Username may not be left blank</p></h6>
+        	{% endif %}
+        	{% if username_long %}
+        	<h6><p class="error">Username must be no longer than 20 characters</p></h6>
+        	{% endif %}
+        	{% if username_not_unique %}
+        	<h6><p class="error">This username is taken</p></h6>
+        	{% endif %}
+        	{% if username_short %}
+        	<h6><p class="error">Usernames must be at least 3 characters long</p></h6>
+        	{% endif %}
+        	{% if username_characters %}
+        	<h6><p class="error">Usernames may only contain letters, digits, and underscores</p></h6>
+        	{% endif %}
+
+        	</br>
+        	</br>
+        	
+        	<input id="new_firstname_input" type="text" placeholder="Firstname" name="firstname" value="">
+        	{% if firstname_blank %}
+        	<h6><p class="error">Firstname may not be left blank</p></h6>
+        	{% endif %}
+        	{% if firstname_long %}
+        	<h6><p class="error">Firstname must be no longer than 20 characters</p></h6>
+        	{% endif %}
+
+        	<input id="new_lastname_input" type="text" placeholder="Lastname" name="lastname" value="">
+        	{% if lastname_blank %}
+        	<h6><p class="error">Lastname may not be left blank</p></h6>
+        	{% endif %}
+        	{% if lastname_long %}
+        	<h6><p class="error">Lastname must be no longer than 20 characters</p></h6>
+        	{% endif %}
+
+        	</br>
+        	</br>
+
+        	<input id="new_password1_input" type="password" placeholder="Password" name="password1" value="">
+         	
+         	<input id="new_password2_input" type="password" placeholder="Re-enter Password" name="password2" value="">
+         	{% if password1_blank %}
+        	<h6><p class="error">Password may not be left blank</p></h6>
+        	{% endif %}
+        	{% if password_short %}
+        	<h6><p class="error">Passwords must be at least 8 characters long</p></h6>
+        	{% endif %}
+        	{% if password_mismatch %}
+        	<h6><p class="error">Passwords do not match</p></h6>
+        	{% endif %}
+        	{% if password1_characters %}
+        	<h6><p class="error">Passwords may only contain letters, digits, and underscores</p></h6>
+        	{% endif %}
+        	{% if password1_letternum %}
+        	<h6><p class="error">Passwords must contain at least one letter and one number</p></h6>
+        	{% endif %}
+         	
+
+        	</br>
+        	</br>
+         	
+         	<input id="new_email_input" type="text" placeholder="Email" name="email" value="">
+         	{% if email_blank %}
+        	<h6><p class="error">Email may not be left blank</p></h6>
+        	{% endif %}
+        	{% if email_long %}
+        	<h6><p class="error">Email must be no longer than 40 characters</p></h6>
+        	{% endif %}
+        	{% if email_invalid %}
+        	<h6><p class="error">Email address must be valid</p></h6>
+        	{% endif %}
+
+        	</br>
+        	</br>
+
+        	<input id="new_submit" type="submit" value="Submit">
+      	</form>
+	{% endif %}
+	{% if edit_user %}
+		<form action="/gu4wdnfe/p3/user/edit" method="POST">
+        	<input id="update_firstname_input" type="text" placeholder="Firstname" name="firstname" value="">
+        	<input id="update_firstname_submit" type="submit" value="Submit">
+        	{% if firstname_long %}
+        	<h6><p class="error">Firstname must be no longer than 20 characters</p></h6>
+        	{% endif %}
+        </form>
+
+        <form action="/gu4wdnfe/p3/user/edit" method="POST">
+        	<input id="update_lastname_input" type="text" placeholder="Last Name" name="lastname" value="">
+        	<input id="update_lastname_submit" type="submit" value="Submit">
+        	{% if lastname_long %}
+        	<h6><p class="error">Lastname must be no longer than 20 characters</p></h6>
+        	{% endif %}
+        </form>
+
+        <form action="/gu4wdnfe/p3/user/edit" method="POST">
+        	<input id="update_email_input" type="text" placeholder="Email" name="email" value="">
+        	<input id="update_email_submit" type="submit" value="Submit">
+        	{% if email_long %}
+        	<h6><p class="error">Email must be no longer than 40 characters</p></h6>
+        	{% endif %}
+        	{% if email_invalid %}
+        	<h6><p class="error">Email address must be valid</p></h6>
+        	{% endif %}
+        </form>
+
+        <form action="/gu4wdnfe/p3/user/edit" method="POST">
+         	<input id="update_password1_input" type="password" placeholder="First Password" name="password1" value="">
+         	<input id="update_password2_input" type="password" placeholder="Re-enter Password" name="password2">
+        	<input id="update_password_submit" type="submit" value="Submit">
+        	{% if password1_error %}
+        	<h6><p class="error">Password must be no longer than 20 characters</p></h6>
+        	{% endif %}
+        	{% if password_short %}
+        	<h6><p class="error">Passwords must be at least 8 characters long</p></h6>
+        	{% endif %}
+        	{% if password_mismatch %}
+        	<h6><p class="error">Passwords do not match</p></h6>
+        	{% endif %}
+        	{% if password1_characters %}
+        	<h6><p class="error">Passwords may only contain letters, digits, and underscores</p></h6>
+        	{% endif %}
+        	{% if password1_letternum %}
+        	<h6><p class="error">Passwords must contain at least one letter and one number</p></h6>
+        	{% endif %}
+      	</form>
+
+	{% endif %}
+
+{% endblock %}
+
+
+

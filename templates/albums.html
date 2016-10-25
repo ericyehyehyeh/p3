@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %} Albums {% endblock %}
+
+
+   {% block center %}
+    <br>
+    <h1>Albums - {{user_name}}</h1>
+    <br>
+
+    {% if not-edit %}
+
+    {% if private_view %}
+    <h4><a  id="user_albums_edit_{{username}}" href="/gu4wdnfe/p3/albums/edit">Edit Albums</a>
+    </h4>
+    {% endif %}
+
+
+    {% for result in albums %}
+
+        <h4><a id="album_{{result['albumid']}}_link" href="/gu4wdnfe/p3/album?albumid={{result['albumid']}}">{{result['title']}}</a></h4>
+
+				
+	  {% endfor %}
+
+    {% endif %}
+    
+
+
+        {% if edit %}
+
+
+        <table>
+
+          {% for result in albums %} 
+            <tr>
+              <td>{{result['title']}}</td>
+
+              <td>
+                <a id="album_edit_{{result['albumid']}}_link" href = "/gu4wdnfe/p3/album/edit?albumid={{result['albumid']}}">Edit</a>
+                </td>
+
+              <td>
+                <form action="/gu4wdnfe/p3/albums/edit" method = "POST">
+                  <input type="hidden" name="albumid" value="{{result['albumid']}}">
+                  <input type="hidden" name="op" value="delete">
+                  <input id = "delete_album_{{result['albumid']}}" type="submit" value="delete">
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+
+
+
+
+        </table>
+        <br><br>
+
+    {% endif %}
+
+    {% if edit %}
+
+      <form action="/gu4wdnfe/p3/albums/edit" method = "POST">
+            <h3>New Album:</h3>
+              <h10>Name:</h10><br>
+              <input type = "text" name = "title" id = "album_add_name"  value="">
+              <input type="hidden" name="username" value="{{username}}">
+              <input type="hidden" name="op" value="add">
+              <input id = "album_add_submit" type="submit" value="submit">
+
+              <br><br>
+      </form>
+
+    {% endif %}
+
+   {% endblock %}
+
+
+
+
+
+

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %} Photos {% endblock %}
+
+{% block center %}
+	
+		<p>
+			{% if first %}
+			<a href = "/gu4wdnfe/p3/pic?picid={{prev}}" id="prev_pic">Previous</a>
+			<br>
+
+            {% endif %}
+
+            {% if last %}
+            <a href = "/gu4wdnfe/p3/pic?picid={{next}}" id="next_pic">Next</a>
+            <br>
+
+            {% endif %}
+
+            <a href = "/gu4wdnfe/p3/album?albumid={{albumid}}" id="parent_album">Back to album</a>
+            <br>
+
+        </p>
+
+       
+
+    	<img src="/static/images/{{picid}}.{{pic_format}}">
+
+        {% if caption %}
+            <h5 id = "pic_{{picid}}_caption">{{caption}}</h5>
+        {% endif %}
+
+        {% if owner_rights %}
+
+        <form action="/gu4wdnfe/p3/pic?picid={{picid}}" method = "POST">
+            <input id = "pic_caption_input" type="text" placeholder="Edit Caption" name="new_caption" value="">
+            <input type="hidden" name="op" value="caption">
+            <input id="pic_caption_submit" type="submit">
+        </form>
+
+        {% endif %}
+       
+
+{% endblock %}
