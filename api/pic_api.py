@@ -11,12 +11,43 @@ pic_api = Blueprint('pic_api', __name__, template_folder='templates', url_prefix
 @pic_api.route('/api/v1/pic/<picid>', methods=['PUT', 'GET'])
 def pic_route(picid):
 
+	logged_in = False
+
+	current_username = ""
 	db = connect_to_database()
 	cur = db.cursor()
 	host = env['host']
 	port = env['port']
+	firstname = ""
+	lastname = ""
+
+	if 'username' in session:
+		logged_in = True
+		current_username = session['username']
+		cur.execute("SELECT * FROM user WHERE username = %s",[current_username])
+		query = cur.fetchall()
+		firstname = query[0]['firstname']
+		lastname = query[0]['lastname']
+
+	if current_username == "":
+		logged_in = False
+
+	grant_access = False
+	owner_rights = False
+	caption_on = False
+	public = False
+	owner = ""
+	album_access = 'private'
+
 
 	my_picid = picid
+
+	if 'username' in session:
+		current_username = session['username']
+		cur.execute("SELECT * FROM user WHERE username = %s",[current_username])
+		query = cur.fetchall()
+		firstname = query[0]['firstname']
+		lastname = query[0]['lastname']
 
 
 
@@ -168,20 +199,18 @@ def pic_route(picid):
     	current_albumid = current_data[0]['albumid']
 
 
-    	try:
-			cur.execute("SELECT picid FROM contain where albumid = %s and sequencenum = %s", [current_data[0]['albumid'], current_data[0]['sequencenum']+1])
-			next_pic = cur.fetchall()
-			next_pic = next_pic[0]['picid'] 
+    	cur.execute("SELECT picid FROM contain where albumid = %s and sequencenum = %s", [current_albumid, current_sequencenum + 1])
+    	next_pic = cur.fetchall()
+    	next_pic = next_pic[0]['picid'] 
 
-		except IndexError:
-			next_pic = 1
+    	if not bool(next_pic):
+    		next_pic = 1
 
-		try:
-			cur.execute("SELECT picid FROM contain where albumid = %s and sequencenum = %s", [current_data[0]['albumid'], current_data[0]['sequencenum']-1])
-			prev_pic = cur.fetchall()
-			prev_pic = prev_pic[0]['picid']
-	
-		except IndexError:
+		cur.execute("SELECT picid FROM contain where albumid = %s and sequencenum = %s", [current_albumid, current_sequencenum - 1])
+		prev_pic = cur.fetchall()
+		prev_pic = prev_pic[0]['picid']
+
+		if not bool(prev_pic):
 			prev_pic = -1
 
 
@@ -231,7 +260,7 @@ def pic_route(picid):
 
 
 	#IF EMPTY REQUEST OPTION
-	elif method.request == "":
+	elif request.method == "":
 		json_error = {
 				"errors":[
 						{

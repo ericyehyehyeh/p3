@@ -14,7 +14,7 @@ def login_route():
 	username = data['username']
 	password = data['password']
 
-	if method.request == "":
+	if request.method == "":
 		json_error = {
 			"errors":[
 						{

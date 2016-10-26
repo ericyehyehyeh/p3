@@ -40,7 +40,7 @@ def user_route():
     				]
     			}
     			print "returning json error after check"
-    		return jsonify(error = json_error), 401
+    		return jsonify(json_error), 401
 
 
 
@@ -166,13 +166,13 @@ def user_route():
 		json_error = {
 				"errors": errors 
     			}
-    	return jsonify(error = json_error), 422
+    	return jsonify(json_error), 422
 
 
 
     
-#IF EMPTY REQUEST OPTION
-	elif method.request == "":
+	#IF EMPTY REQUEST OPTION
+	if (request.method == ''):
 		json_error = {
 				"errors":[
 						{
@@ -180,14 +180,14 @@ def user_route():
     					}
     				]
     			}
-    		return jsonify(error = json_error), 422
+    	return jsonify(json_error), 422
 
 
 
 @user_api.route('/api/v1/user/edit', methods=['PUT'])
 def user_edit_route():
 		
-#PUT REQUEST OPTION
+	#PUT REQUEST OPTION
 	if request.method == 'PUT':
 		user_input = request.get_json()
 		page_firstname = ""
@@ -206,7 +206,7 @@ def user_edit_route():
     					}
     				]
     			}
-    		return jsonify(error = json_error), 401
+    		return jsonify(json_error), 401
 
 
 		error = False
@@ -223,7 +223,7 @@ def user_edit_route():
     					}
     				]
     			}
-    		return jsonify(error = json_error), 403
+    		return jsonify(json_error), 403
 
 
 		if user_input['firstname']:
@@ -292,14 +292,14 @@ def user_edit_route():
 		json_error = {
 				"errors": errors 
     			}
-		return jsonify(error=json_error), 422
+		return jsonify(json_error), 422
 
 
 
 
 
 #IF EMPTY REQUEST OPTION
-	elif method.request == "":
+	elif request.method == "":
 		json_error = {
 				"errors":[
 						{
