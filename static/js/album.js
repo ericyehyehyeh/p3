@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
     $("#loginForm").submit(function(event) {
     var url = "http://localhost:3000/gu4wdnfe/p3/api/v1/login";
