@@ -14,22 +14,24 @@ $(document).ready(function() {
             success : function(data) {
                 console.log("it worked! get");
                 console.log(data);
+                username = data['username'];
 
                 $.ajax({
                     type: "PUT", 
                     contentType: "application/json; charset=UTF-8",
-                    data: JSON.stringify(), 
+                    data: JSON.stringify({
+                        "username" : document.getElementById("new_username_input"),
+                        "firstname" : document.getElementById("new_firstname_input"),
+                        "lastname" :  document.getElementById("new_lastname_input"),
+                        "email" : document.getElementById("new_email_input"),
+                        "password1" : document.getElementById("new_password1_input"),
+                        "password2" : document.getElementById("new_password2_input")
+                    }), 
                     url: url,
 
                     success : function(data) {
                         console.log("it worked! put");
                         console.log(data);
-                        firstname = document.getElementById("update_firstname_input");
-                        lastname = document.getElementById("update_lastname_input");
-                        email = document.getElementById("update_email_input");
-                        password1 = document.getElementById("update_password1_input");
-                        password2 = document.getElementById("update_password2_input");
-
                         console.log("Successfully updated user information!")
                     },
 
