@@ -31,7 +31,7 @@ def pic_route(picid):
     					}
     				]
     			}
-    		return jsonify(error = json_error), 404
+    		return jsonify(json_error), 404
 
 
 
@@ -62,7 +62,7 @@ def pic_route(picid):
     					}
     				]
     			}
-    		return jsonify(error = json_error), 403
+    		return jsonify(json_error), 403
 
 		if (logged_in == False) & (public == False):
 			json_error = {
@@ -72,7 +72,8 @@ def pic_route(picid):
     					}
     				]
     			}
-    		return jsonify(error = json_error), 401
+    		return jsonify(json_error), 401
+
 
 
 		cur.execute("SELECT format FROM photo WHERE picid = %s", [my_picid])
@@ -86,13 +87,32 @@ def pic_route(picid):
 		caption = pic_info[0]['caption']
 
 
+		try:
+			cur.execute("SELECT picid FROM contain where albumid = %s and sequencenum = %s", [albumid, sequencenum + 1])
+			next_pic = cur.fetchall()
+			next_pic = next_pic[0]['picid'] 
+
+		except IndexError:
+			next_pic = 1
+
+		try:
+			cur.execute("SELECT picid FROM contain where albumid = %s and sequencenum = %s", [albumid, sequencenum - 1])
+			prev_pic = cur.fetchall()
+			prev_pic = prev_pic[0]['picid']
+	
+		except IndexError:
+			prev_pic = -1
+
+
+
+
 		json_data = {
 	  		"albumid": albumid,
 	  		"caption": caption,
 	  		"format": format_info,
-	  		"next": sequencenum+1,
+	  		"next": next_pic,
 	  		"picid": my_picid,
-	 		"prev": sequencenum-1
+	 		"prev": prev_pic
 		}
 
 		return jsonify(json_data)
@@ -109,7 +129,7 @@ def pic_route(picid):
     					}
     				]
     			}
-    		return jsonify(error = json_error), 401
+    		return jsonify(json_error), 401
 
 
 
@@ -135,7 +155,7 @@ def pic_route(picid):
     					}
     				]
     			}
-    		return jsonify(error = json_error), 404
+    		return jsonify(json_error), 404
 
 
     	cur.execute("SELECT format FROM photo WHERE picid = %s" , [update_picid])
@@ -145,11 +165,32 @@ def pic_route(picid):
     	cur.execute("SELECT sequencenum, albumid FROM contain WHERE picid = %s" , [update_picid])
     	current_data = cur.fetchall()
     	current_sequencenum = current_data[0]['sequencenum']
-    	current_prev = current_sequencenum - 1
-    	current_next = current_sequencenum + 1
     	current_albumid = current_data[0]['albumid']
 
-    	
+
+    	try:
+			cur.execute("SELECT picid FROM contain where albumid = %s and sequencenum = %s", [current_data[0]['albumid'], current_data[0]['sequencenum']+1])
+			next_pic = cur.fetchall()
+			next_pic = next_pic[0]['picid'] 
+
+		except IndexError:
+			next_pic = 1
+
+		try:
+			cur.execute("SELECT picid FROM contain where albumid = %s and sequencenum = %s", [current_data[0]['albumid'], current_data[0]['sequencenum']-1])
+			prev_pic = cur.fetchall()
+			prev_pic = prev_pic[0]['picid']
+	
+		except IndexError:
+			prev_pic = -1
+
+
+
+
+    	current_prev = prev_pic
+    	current_next = next_pic
+
+
 
     	if current_albumid != albumid:
     		error = True
@@ -168,7 +209,7 @@ def pic_route(picid):
     					}
     				]
     			}
-    		return jsonify(error = json_error), 403
+    		return jsonify(json_error), 403
 
 
     	if error == False:
@@ -198,7 +239,7 @@ def pic_route(picid):
     					}
     				]
     			}
-    		return jsonify(error = json_error), 422
+    		return jsonify(json_error), 422
 
 
 

@@ -244,16 +244,23 @@ def album_route():
 	if 'username' in session:
 		logged_in = True
 		current_username = session['username']
+		cur.execute("SELECT * FROM user WHERE username = %s",[current_username])
+		query = cur.fetchall()
+		firstname = query[0]['firstname']
+		lastname = query[0]['lastname']
+
 	if current_username == "":
 		logged_in = False
 
 
 	options = {
-		"logged_in": logged_in
+		"logged_in": logged_in, 
+		"firstname": firstname, 
+		"lastname": lastname
 	}
 
 
-	return render_template("album.html", **options)
+	return render_template("single_page.html", **options)
 
 
 

@@ -48,7 +48,7 @@ def album_route(albumid):
     					}
     				]
     			}
-    	return jsonify(error = json_error), 404
+    	return jsonify(json_error), 404
 
 
 	cur.execute("SELECT username, access from album where albumid = %s", [albumid])
@@ -80,7 +80,7 @@ def album_route(albumid):
     					}
     				]
     			}
-    	return jsonify(error = json_error), 403
+    	return jsonify(json_error), 403
     	
 	if (logged_in == False) and (public == False):
 		json_error = {
@@ -90,7 +90,7 @@ def album_route(albumid):
     					}
     				]
     			}
-    	return jsonify(error = json_error), 401
+    	return jsonify(json_error), 401
 
 
 	cur.execute('SELECT username FROM user')
@@ -117,6 +117,7 @@ def album_route(albumid):
 		my_sequencenum = capt_seq[0]['sequencenum']
 
 		edit[0]['caption'] = my_caption
+		edit[0]['albumid'] = albumid
 		edit[0]['sequencenum'] = my_sequencenum
 		new_edit = edit[0]
 
