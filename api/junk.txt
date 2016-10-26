@@ -1,0 +1,19 @@
+var queryString = url ? url.split('?')[1];
+
+var base = url ? url.split('?')[0];
+if base == picid vs base == albumid
+
+if queryString():
+	albumid = queryString.split('=')[1]
+
+
+
+<form onsubmit="hello_world(); return false;">
+    <input type="text" placeholder="Hello World!">
+</form>
+
+<script text="text/javascript">
+    function hello_world() {
+        console.log("Hey!");
+    }
+</script>

@@ -93,6 +93,15 @@
 
         	<input id="new_submit" type="submit" value="Submit">
       	</form>
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script type="text/javascript" src="/static/js/user.js"></script>
+
+
+
+
+
 	{% endif %}
 	{% if edit_user %}
 		<form action="/gu4wdnfe/p3/user/edit" method="POST">
@@ -142,8 +151,12 @@
         	<h6><p class="error">Passwords must contain at least one letter and one number</p></h6>
         	{% endif %}
       	</form>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script type="text/javascript" src="/static/js/user.js"></script>
 
 	{% endif %}
+
+
 
 {% endblock %}
 

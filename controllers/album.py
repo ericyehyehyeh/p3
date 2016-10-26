@@ -232,138 +232,26 @@ def album_edit_route():
 @album.route('/album', methods=['GET', 'POST'])
 def album_route():
 
-	albumid = request.args.get('albumid')
 	db = connect_to_database()
 	cur = db.cursor()
-	
-
-	logged_in = False
-	caption_on = False
-
-	current_username = ""
-
-	firstname = ""
-	lastname = ""
-	if 'username' in session:
-		logged_in = True
-		current_username = session['username']
-		cur.execute("SELECT * FROM user WHERE username = %s",[current_username])
-		query = cur.fetchall()
-		firstname = query[0]['firstname']
-		lastname = query[0]['lastname']
-
-	if current_username == "":
-		logged_in = False
-
-	grant_access = False
-	owner_rights = False
-	public = False
-
-	owner = ""
-	album_access = 'private'
-
-
 	host = env['host']
 	port = env['port']
 	
+	logged_in = False
 
-	cur.execute("SELECT * FROM album WHERE albumid = %s" , [albumid])
-	invalidUser = cur.fetchall()
-	if not bool(invalidUser):
-		abort(404)
+	current_username = ""
 
-	cur.execute("SELECT username, access from album where albumid = %s", [albumid])
-	allowed_access = cur.fetchall()
-	album_access = allowed_access[0]['access']
-	owner = allowed_access[0]['username']
+	if 'username' in session:
+		logged_in = True
+		current_username = session['username']
+	if current_username == "":
+		logged_in = False
 
-	if album_access == "public":
-		grant_access = True
-		public = True
-	if owner == current_username:
-		grant_access = True
-		owner_rights = True
-	else:
-		cur.execute("SELECT username from AlbumAccess where albumid = %s", [albumid])
-		allowed_users = cur.fetchall()
-		for user in allowed_users:
-			user = user['username']
-			if current_username == user:
-				grant_access = True
-
-
-
-	if (logged_in == True) and (grant_access == False):
-		abort(403)
-
-	
-	if (logged_in == False) and (public == False):
-		return redirect("/gu4wdnfe/p3/login")
-
-
-
-
-
-
-	cur.execute('SELECT username FROM user')
-	results = cur.fetchall()
-
-	cur.execute("SELECT * FROM album WHERE access = 'public'")
-	pubalbums = cur.fetchall()
-
-
-
-	cur.execute("SELECT picid, sequencenum FROM contain WHERE albumid = %s" , [albumid])
-	pics = cur.fetchall()
-	pic_format = []
-	all_captions = []
-	new_edit = []
-	my_caption = ""
-	for pic in pics:
-		cur.execute("SELECT picid, format, date FROM photo WHERE picid = %s" , [pic['picid']])
-		edit = cur.fetchall()
-
-		cur.execute("SELECT caption FROM contain WHERE picid = %s" , [pic['picid']])
-		captions = cur.fetchall()
-		my_caption = captions[0]['caption']
-
-		edit[0]['caption'] = my_caption
-		new_edit = edit[0]
-
-		pic_format.append(new_edit)
-
-	
-	if my_caption is not None:
-		caption_on = True
-	if len(my_caption) == 0:
-		caption_on = False
-		
-
-	cur.execute("SELECT title FROM album WHERE albumid = %s" , [albumid])
-	title = cur.fetchall()
-	title = title[0]['title']
-
-	
 
 	options = {
-		"users": True,
-		"results": results,
-		"firstname": firstname,
-		"lastname": lastname,
-		"owner": owner,
-		"owner_rights": owner_rights,
-		"albumid": albumid,
-		"caption_on": caption_on,
-		"not_edit": True,
-		"pic_format": pic_format,
-		"pics": pics,
-		"title": title,
-		"logged_in": logged_in,
-		"hostValue": host,
-		"portValue": port,
-		"edit": False,
-		"pub_user_albums": pubalbums
+		"logged_in": logged_in
 	}
+
 
 	return render_template("album.html", **options)
 

@@ -1,6 +1,7 @@
 from flask import Flask, render_template
-import extensions
+#import extensions
 import controllers
+import api
 import config
 
 # Initialize Flask app with the template folder address
@@ -16,7 +17,13 @@ app.register_blueprint(controllers.main)
 app.register_blueprint(controllers.login)
 app.register_blueprint(controllers.logout)
 app.register_blueprint(controllers.user)
-app.register_blueprint(controllers.api)
+
+
+app.register_blueprint(api.album_api)
+app.register_blueprint(api.login_api)
+app.register_blueprint(api.logout_api)
+app.register_blueprint(api.user_api)
+app.register_blueprint(api.pic_api)
 
 
 
