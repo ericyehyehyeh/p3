@@ -14,18 +14,21 @@ $(document).ready(function() {
             //***If there is a url query parameter (for example: /login?url=/the/prev/url) then redirect to the URL.
             window.location.replace("http://localhost:3000/gu4wdnfe/p3/api/v1/")
             },
-        error : function(response, status, error) {
-            //SOME WORK TO DO WITH ERROR CHECKING
-            //ALSO HAVE TO WORK ON REPRESENTING ERROR IN LOGIN.HTML, SHOULD ONLY HAVE TO DO AN APPEND FUNCTION TO A <P> TAG
+        error : function(response) {
+            var response = JSON.parse(response);
+            var my_errors = response['errors'];
+            var error_message = "";
+            var page = document.getElementById("content");
 
-            /*var responseArray = JSON.parse(response.responseText);
-            var firstMessageJSON = reponseArray[0];
-            alert(firstMessageJSON);
-            var responseMessage = JSON.parse(reponseArray.errors[0]);
-            //var obj = responseMessage.message;
-            //alert(reponse);
-            //alert(response);
-            alert(response.responseText);*/
+            for (i = 0; i < my_errors.length; i++){
+                error_message = my_errors[i]['message'];
+
+                var error_para = document.createElement("p");
+                error_para.setAttribute("class", "error");
+                var error = document.createTextNode(error_message);
+                error_para.appendChild(error);
+                page.appendChild(error_para);
+            }         
         }
         });
 

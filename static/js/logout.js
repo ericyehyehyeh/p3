@@ -10,7 +10,21 @@ $(document).ready(function() {
         success : function(data) {
             window.location.replace("http://localhost:3000/gu4wdnfe/p3/api/v1/")
             },
-        error : function(response, status, error) {
+        error : function(response) {
+            var response = JSON.parse(response);
+            var my_errors = response['errors'];
+            var error_message = "";
+            var page = document.getElementById("content");
+
+            for (i = 0; i < my_errors.length; i++){
+                error_message = my_errors[i]['message'];
+
+                var error_para = document.createElement("p");
+                error_para.setAttribute("class", "error");
+                var error = document.createTextNode(error_message);
+                error_para.appendChild(error);
+                page.appendChild(error_para);
+            }         
         }
         });
         event.preventDefault();
