@@ -58,6 +58,9 @@ def user_route():
 		print "pre json input"
 
 		user_input = request.get_json()
+		print "user_input"
+		print user_input
+		print request
 
 		print "pre json input 2"
 
@@ -206,7 +209,7 @@ def user_route():
 
 
 		json_error = {"errors": errors}
-
+		print json_error
 		return jsonify(json_error), 422
 
 
