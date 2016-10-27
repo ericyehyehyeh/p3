@@ -242,21 +242,22 @@ def user_route():
 
 		if user_input['password1']:
 			password1 = user_input['password1']
-			if len(password1) < 8:
-				errors.append({"message": "Passwords must be at least 8 characters long"})
-				error = True
-			if password1 != password2:
-				errors.append({"message": "Passwords do not match"})
-				error = True
-			if not re.match("^(?=.*[a-zA-z])(?=.*\d)", password1):
-				errors.append({"message": "Passwords must contain at least one letter and one number"})
-				error = True
-			if not re.match("^[\w\d_]*$", password1):
-				errors.append({"message": "Passwords may only contain letters, digits, and underscores"})
-				error = True
-			if not re.match("^[\w\d_]*$", username):
-				errors.append({"message": "Usernames may only contain letters, digits, and underscores"})
-				error = True
+			if(len(password1) != 0) and (len(password2) != 0):
+				if len(password1) < 8:
+					errors.append({"message": "Passwords must be at least 8 characters long"})
+					error = True
+				if password1 != password2:
+					errors.append({"message": "Passwords do not match"})
+					error = True
+				if not re.match("^(?=.*[a-zA-z])(?=.*\d)", password1):
+					errors.append({"message": "Passwords must contain at least one letter and one number"})
+					error = True
+				if not re.match("^[\w\d_]*$", password1):
+					errors.append({"message": "Passwords may only contain letters, digits, and underscores"})
+					error = True
+				if not re.match("^[\w\d_]*$", username):
+					errors.append({"message": "Usernames may only contain letters, digits, and underscores"})
+					error = True
 
 		if user_input['email']:
 			email = user_input['email']
