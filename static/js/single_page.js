@@ -28,7 +28,7 @@ $(document).ready(function() {
                             "next": next, 
                             "prev": prev
                         }), 
-                        url: "http://localhost:3000/gu4wdnfe/p3/api/v1/pic/"+picid,
+                        url: "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/api/v1/pic/"+picid,
                         success : function(data) {
                             console.log("success");
                             },
@@ -80,7 +80,7 @@ function loadURL() {
     }
 
     //url for ajax is decided
-    var url = "http://localhost:3000/gu4wdnfe/p3/api/v1/"+method+"/"+id;
+    var url = "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/api/v1/"+method+"/"+id;
     console.log(url);
 
     //fill page with ajax
@@ -146,7 +146,7 @@ function loadURL() {
                     image_element.src = "/static/images/" + picid + "." + format;
                     image_element.width = "200";
                     image_element.height = "200";
-                    newURL = "http://localhost:3000/gu4wdnfe/p3/pic?picid=" + picid;
+                    newURL = "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/pic?picid=" + picid;
                     parent_element.href = newURL;
                    
                     //TODO: add onlick function to go to next state
@@ -209,13 +209,13 @@ function loadURL() {
                     if (prev == -1) {
                         console.log("Previous returned to same pic");
                         window.history.pushState({},"",window.location.href);
-                        var newURL = "http://localhost:3000/gu4wdnfe/p3/pic?picid=" + picid;
+                        var newURL = "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/pic?picid=" + picid;
                         window.history.replaceState({},"prev",newURL);
                         window.history.go(0);
                     }
                     else {
                         window.history.pushState({},"",window.location.href);
-                        var newURL = "http://localhost:3000/gu4wdnfe/p3/pic?picid=" + prev;
+                        var newURL = "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/pic?picid=" + prev;
                         window.history.replaceState({},"prev",newURL);
                         window.history.go(0);
                     }
@@ -232,13 +232,13 @@ function loadURL() {
                     if (next == 1){
                         console.log("Next returned to same pic");
                         window.history.pushState({},"",window.location.href);
-                        var newURL = "http://localhost:3000/gu4wdnfe/p3/pic?picid=" + picid;
+                        var newURL = "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/pic?picid=" + picid;
                         window.history.replaceState({},"next",newURL);
                         window.history.go(0);
                     }
                     else {
                         window.history.pushState({},"",window.location.href);
-                        var newURL = "http://localhost:3000/gu4wdnfe/p3/pic?picid=" + next;
+                        var newURL = "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/pic?picid=" + next;
                         window.history.replaceState({},"next",newURL);
                         window.history.go(0);
                     }
