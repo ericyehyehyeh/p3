@@ -147,6 +147,8 @@ $(document).ready(function() {
                                 error_para.appendChild(error);
                                 page.appendChild(error_para);
                             }
+                        }
+
                     });
                 }
 
@@ -159,11 +161,10 @@ $(document).ready(function() {
 
 
             }
-        }
 
 
-
-    },
+        },
+    
         error : function(response) {
             var code = response.status;
             var response = JSON.parse(response);

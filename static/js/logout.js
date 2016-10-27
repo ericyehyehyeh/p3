@@ -1,6 +1,5 @@
-
 $(document).ready(function() {
-    $("#logoutForm").submit(function(event) {
+    $("#nav_logout").submit(function(event) {
     event.preventDefault();
     var url = "http://localhost:3000/gu4wdnfe/p3/api/v1/logout";
     $.ajax({
@@ -9,7 +8,7 @@ $(document).ready(function() {
         data: JSON.stringify(),
         url: url,
         success : function(data) {
-            window.location.replace("http://localhost:3000/gu4wdnfe/p3/")
+            window.location.replace("http://localhost:3000/gu4wdnfe/p3")
             },
         error : function(response) {
             var response = JSON.parse(response);
