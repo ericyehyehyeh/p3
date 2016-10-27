@@ -34,7 +34,7 @@ $(document).ready(function() {
                 var error = "";
 
                 var password_error = true;
-                if (password1.length == 0) & (password2.length == 0){
+                if (password1.length == 0) && (password2.length == 0){
                     password_error = false;
                 }
                 var errors = false;
