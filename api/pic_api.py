@@ -10,7 +10,7 @@ pic_api = Blueprint('pic_api', __name__, template_folder='templates', url_prefix
 
 @pic_api.route('/api/v1/pic/<picid>', methods=['PUT', 'GET'])
 def pic_route(picid):
-
+	print "pic route taken!"
 	logged_in = False
 
 	current_username = ""
@@ -62,10 +62,14 @@ def pic_route(picid):
     					}
     				]
     			}
-    		return jsonify(json_error), 404
+			return jsonify(json_error), 404
 
 
-
+		cur.execute("SELECT * FROM contain WHERE picid = %s", [my_picid])
+		pic_info = cur.fetchall()
+		albumid = pic_info[0]['albumid']
+		sequencenum = pic_info[0]['sequencenum']
+		caption = pic_info[0]['caption']
 		cur.execute("SELECT username, access from album where albumid = %s", [albumid])
 		allowed_access = cur.fetchall()
 		album_access = allowed_access[0]['access']
@@ -93,7 +97,7 @@ def pic_route(picid):
     					}
     				]
     			}
-    		return jsonify(json_error), 403
+			return jsonify(json_error), 403
 
 		if (logged_in == False) & (public == False):
 			json_error = {
@@ -103,7 +107,7 @@ def pic_route(picid):
     					}
     				]
     			}
-    		return jsonify(json_error), 401
+			return jsonify(json_error), 401
 
 
 
@@ -111,11 +115,7 @@ def pic_route(picid):
 		format_info = cur.fetchall()
 		format_info = format_info[0]['format']
 
-		cur.execute("SELECT * FROM contain WHERE picid = %s", [my_picid])
-		pic_info = cur.fetchall()
-		albumid = pic_info[0]['albumid']
-		sequencenum = pic_info[0]['sequencenum']
-		caption = pic_info[0]['caption']
+		
 
 
 		try:

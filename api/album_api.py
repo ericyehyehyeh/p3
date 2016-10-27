@@ -154,10 +154,11 @@ def album_route(albumid):
 		"lastupdated": lastupdated,
 		"pics": pic_format,
 		"title": title,
-		"username": current_username
+		"username": owner
 		}
 
 	return jsonify(my_data)
+
 
 
 
