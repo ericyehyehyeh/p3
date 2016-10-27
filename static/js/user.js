@@ -1,5 +1,149 @@
 $(document).ready(function() {
 
+    var url = "http://localhost:3000/gu4wdnfe/p3/api/v1/user";
+
+    $.ajax({
+        type: "GET",
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify(), 
+        url: url,
+        success: function(data) {
+            var username = data['username'];
+            var firstname = data['firstname'];
+            var lastname = data['lastname'];
+            var email = data['email'];
+            // Assign these values to the fields
+
+            var page = document.getElementById('edit_submit_input');
+
+            var el_1 = document.createElement("input");
+            el_1.setAttribute("id", "update_firstname_input");
+            el_1.setAttribute("type", "text");
+            el_1.setAttribute("placeholder", "Firstname");
+            el_1.setAttribute("name", "firstname");
+            el_1.setAttribute("value", "");
+            var submit_1 = document.createElement("input");
+            submit_1.setAttribute("type", "submit");
+            submit_1.setAttribute("id", "update_firstname_submit");
+            submit_1.setAttribute("value", "Submit");
+
+            var el_2 = document.createElement("input");
+            el_2.setAttribute("id", "update_lastname_input");
+            el_2.setAttribute("type", "text");
+            el_2.setAttribute("placeholder", "Last Name");
+            el_2.setAttribute("name", "lastname");
+            el_2.setAttribute("value", "");
+            var submit_2 = document.createElement("input");
+            submit_2.setAttribute("type", "submit");
+            submit_2.setAttribute("id", "update_lastname_submit");
+            submit_2.setAttribute("value", "Submit");
+
+            var el_3 = document.createElement("input");
+            el_3.setAttribute("id", "update_email_input");
+            el_3.setAttribute("type", "text");
+            el_3.setAttribute("placeholder", "Email");
+            el_3.setAttribute("name", "email");
+            el_3.setAttribute("value", "");
+            var submit_3 = document.createElement("input");
+            submit_3.setAttribute("type", "submit");
+            submit_3.setAttribute("id", "update_email_submit");
+            submit_3.setAttribute("value", "Submit");
+
+            var el_4 = document.createElement("input");
+            el_4.setAttribute("id", "update_password1_input");
+            el_4.setAttribute("type", "text");
+            el_4.setAttribute("placeholder", "First Password");
+            el_4.setAttribute("name", "password1");
+            el_4.setAttribute("value", "");
+            var el_5 = document.createElement("input");
+            el_5.setAttribute("id", "update_password2_input");
+            el_5.setAttribute("type", "text");
+            el_5.setAttribute("placeholder", "Re-Enter Password");
+            el_5.setAttribute("name", "password2");
+            var submit_4 = document.createElement("input");
+            submit_4.setAttribute("type", "submit");
+            submit_4.setAttribute("id", "update_password_submit");
+            submit_4.setAttribute("value", "Submit");
+
+            page.appendChild(el_1);
+            page.appendChild(submit_1);
+            page.appendChild(el_2);
+            page.appendChild(submit_2);
+            page.appendChild(el_3);
+            page.appendChild(submit_3);
+            page.appendChild(el_4);
+            page.appendChild(el_5);
+            page.appendChild(submit_4);
+
+
+            document.getElementById('Georges').value = "George Swirski";
+        },
+        error: function(response) {
+
+            var page = document.getElementById('new_user_input');
+
+            var el_0 = document.createElement("input");
+            el_0.setAttribute("id", "new_username_input");
+            el_0.setAttribute("type", "text");
+            el_0.setAttribute("placeholder", "Username");
+            el_0.setAttribute("name", "username");
+            el_0.setAttribute("value", "");
+            
+            
+
+            var el_1 = document.createElement("input");
+            el_1.setAttribute("id", "new_firstname_input");
+            el_1.setAttribute("type", "text");
+            el_1.setAttribute("placeholder", "Firstname");
+            el_1.setAttribute("name", "firstname");
+            el_1.setAttribute("value", "");
+            
+
+            var el_2 = document.createElement("input");
+            el_2.setAttribute("id", "new_lastname_input");
+            el_2.setAttribute("type", "text");
+            el_2.setAttribute("placeholder", "Last Name");
+            el_2.setAttribute("name", "lastname");
+            el_2.setAttribute("value", "");
+
+            var el_4 = document.createElement("input");
+            el_4.setAttribute("id", "new_password1_input");
+            el_4.setAttribute("type", "text");
+            el_4.setAttribute("placeholder", "First Password");
+            el_4.setAttribute("name", "password1");
+            el_4.setAttribute("value", "");
+            var el_5 = document.createElement("input");
+            el_5.setAttribute("id", "new_password2_input");
+            el_5.setAttribute("type", "text");
+            el_5.setAttribute("placeholder", "Re-Enter Password");
+            el_5.setAttribute("name", "password2");
+
+
+            var el_3 = document.createElement("input");
+            el_3.setAttribute("id", "new_email_input");
+            el_3.setAttribute("type", "text");
+            el_3.setAttribute("placeholder", "Email");
+            el_3.setAttribute("name", "email");
+            el_3.setAttribute("value", "");
+
+            var submit = document.createElement("input");
+            submit.setAttribute("type", "submit");
+            submit.setAttribute("value", "Submit");
+
+
+            
+            
+            page.appendChild(el_0);
+            page.appendChild(el_1);
+            page.appendChild(el_2);
+            page.appendChild(el_4);
+            page.appendChild(el_5);
+            page.appendChild(el_3);
+            page.appendChild(submit);
+
+        }
+    });
+
 
     //EDIT ROUTE
     $("#edit_submit").submit(function(event) {
