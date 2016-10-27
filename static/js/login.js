@@ -27,8 +27,9 @@ $(document).ready(function() {
             
             },
         error : function(response) {
-            var response = JSON.parse(response);
-            var my_errors = response['errors'];
+            var response2 = JSON.parse(response.responseText);
+            alert(response2);
+            var my_errors = response2['errors'];
             var error_message = "";
             var page = document.getElementById("content").value;
 
