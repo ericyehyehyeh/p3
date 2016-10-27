@@ -64,7 +64,7 @@ def login_api_route():
     						}
   						]
 					}
-			return jsonify(error=json_error), 422
+			return jsonify(json_error), 422
 
 
 
