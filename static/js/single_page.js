@@ -41,7 +41,7 @@ $(document).ready(function() {
                 var album_edit = document.createElement("a");
                 var link = "http://localhost:3000/gu4wdnfe/p3/album/edit?albumid="+albumid;
                 album_edit.href = link;
-                album_edit.innerHTML = "EDIT";
+                album_edit.innerHTML = "EDIT<br>";
                 //var edit_link = document.createTextNode("http://localhost:3000/gu4wdnfe/p3/album/edit?albumid="+albumid);
                 //album_edit.appendChild(edit_link);
 
@@ -50,8 +50,12 @@ $(document).ready(function() {
                 page.appendChild(page_title);
                 page.appendChild(album_edit);
 
+                console.log("photo size is " + photos.length + " and is " + typeof photos);
+                //var photo = photos[0];
+                //console.log("first photo id is " + photo['picid']);
                 for (i = 0; i < photos.length; i++){
                     console.log("photo loaded")
+                    photo = photos[i];
                     var caption = photo['caption']; 
                     var sequencenum = photo['sequencenum'];
                     var picid = photo['picid'];
@@ -71,7 +75,7 @@ $(document).ready(function() {
 
                     var date_element = document.createElement("h6");
                     var pic_date = document.createTextNode("Date:" + date);
-                    date_element.appendChild(date);
+                    date_element.appendChild(pic_date);
 
                     page.appendChild(image_element);
                     page.appendChild(caption_element);
