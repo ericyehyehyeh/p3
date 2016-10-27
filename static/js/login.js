@@ -1,24 +1,36 @@
 
 $(document).ready(function() {
     $("#loginForm").submit(function(event) {
+    event.preventDefault();
     var url = "http://localhost:3000/gu4wdnfe/p3/api/v1/login";
     $.ajax({
         type: "POST", 
         contentType: "application/json; charset=UTF-8",
         data: JSON.stringify({
-            "username": document.getElementById("login_username_input"),
-            "password": document.getElementById("login_password_input")
+            "username": document.getElementById("login_username_input").value,
+            "password": document.getElementById("login_password_input").value
         }), 
         url: url,
         success : function(data) {
-            //***If there is a url query parameter (for example: /login?url=/the/prev/url) then redirect to the URL.
-            window.location.replace("http://localhost:3000/gu4wdnfe/p3/api/v1/")
+            
+            var query = window.location.href.indexOf('=');
+            var link = "";
+            if (query == -1){
+                window.location.replace("http://localhost:3000/gu4wdnfe/p3")
+            }
+            else{
+                link = window.location.href.split('=')[1];
+                window.location.replace(link);
+            }
+
+    
+            
             },
         error : function(response) {
             var response = JSON.parse(response);
             var my_errors = response['errors'];
             var error_message = "";
-            var page = document.getElementById("content");
+            var page = document.getElementById("content").value;
 
             for (i = 0; i < my_errors.length; i++){
                 error_message = my_errors[i]['message'];

@@ -3,6 +3,7 @@ $(document).ready(function() {
 
     //EDIT ROUTE
     $("#edit_submit").submit(function(event) {
+        event.preventDefault();
         var url = "http://localhost:3000/gu4wdnfe/p3/api/v1/user";
 
         $.ajax({
@@ -12,11 +13,11 @@ $(document).ready(function() {
             url: url,
 
             success : function(data) {
-                var firstname = document.getElementById("update_firstname_input");
-                var lastname = document.getElementById("update_lastname_input");
-                var email = document.getElementById("update_email_input");
-                var password1 = document.getElementById("update_password1_input");
-                var password2 = document.getElementById("update_password2_input");
+                var firstname = document.getElementById("update_firstname_input").value;
+                var lastname = document.getElementById("update_lastname_input").value;
+                var email = document.getElementById("update_email_input").value;
+                var password1 = document.getElementById("update_password1_input").value;
+                var password2 = document.getElementById("update_password2_input").value;
 
 
                 var page = document.getElementById("content");
@@ -31,7 +32,7 @@ $(document).ready(function() {
                     error_para.appendChild(error);
                 }
                 var re_letternum = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
-                if (!re_letternum.text(password1)){
+                if (!re_letternum.test(password1)){
                     error = document.createTextNode("Passwords must contain at least one letter and one number");
                     error_para.appendChild(error);
                 }
@@ -44,7 +45,7 @@ $(document).ready(function() {
                     error_para.appendChild(error);
                 }
                 var re_email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                if (!re_email.text(email)){
+                if (!re_email.test(email)){
                     error = document.createTextNode("Email address must be valid");
                     error_para.appendChild(error);
                 }
@@ -68,12 +69,12 @@ $(document).ready(function() {
                     type: "PUT", 
                     contentType: "application/json; charset=UTF-8",
                     data: JSON.stringify({
-                        "username" : document.getElementById("update_username_input"),
-                        "firstname" : document.getElementById("update_firstname_input"),
-                        "lastname" :  document.getElementById("update_lastname_input"),
-                        "email" : document.getElementById("update_email_input"),
-                        "password1" : document.getElementById("update_password1_input"),
-                        "password2" : document.getElementById("update_password2_input")
+                        "username" : document.getElementById("update_username_input").value,
+                        "firstname" : document.getElementById("update_firstname_input").value,
+                        "lastname" :  document.getElementById("update_lastname_input").value,
+                        "email" : document.getElementById("update_email_input").value,
+                        "password1" : document.getElementById("update_password1_input").value,
+                        "password2" : document.getElementById("update_password2_input").value
                     }), 
                     url: url,
 
@@ -84,7 +85,7 @@ $(document).ready(function() {
                     },
 
                     error : function(response) {
-                        var response = JSON.parse(response);
+                        var response = JSON.parse('response');
                         var my_errors = response['errors'];
                         var error_message = "";
                         var page = document.getElementById("content");
@@ -102,7 +103,7 @@ $(document).ready(function() {
                 });
                 },
             error : function(response) {
-                var response = JSON.parse(response);
+                var response = JSON.parse('response');
                 var my_errors = response['errors'];
                 var error_message = "";
                 var page = document.getElementById("content");
@@ -127,12 +128,12 @@ $(document).ready(function() {
         event.preventDefault();
         var url = "http://localhost:3000/gu4wdnfe/p3/api/v1/user";
 
-        var username = document.getElementById("new_username_input");
-        var firstname = document.getElementById("new_firstname_input");
-        var lastname = document.getElementById("new_lastname_input");
-        var email = document.getElementById("new_email_input");
-        var password1 = document.getElementById("new_password1_input");
-        var password2 = document.getElementById("new_password2_input");
+        var username = document.getElementById("new_username_input").value;
+        var firstname = document.getElementById("new_firstname_input").value;
+        var lastname = document.getElementById("new_lastname_input").value;
+        var email = document.getElementById("new_email_input").value;
+        var password1 = document.getElementById("new_password1_input").value;
+        var password2 = document.getElementById("new_password2_input").value;
 
 
         var page = document.getElementById("content");
@@ -155,7 +156,7 @@ $(document).ready(function() {
             error_para.appendChild(error);
         }
         var re_letternum = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
-        if (!re_letternum.text(password1)){
+        if (!re_letternum.test(password1)){
             error = document.createTextNode("Passwords must contain at least one letter and one number");
             error_para.appendChild(error);
         }
@@ -168,7 +169,7 @@ $(document).ready(function() {
             error_para.appendChild(error);
         }
         var re_email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!re_email.text(email)){
+        if (!re_email.test(email)){
             error = document.createTextNode("Email address must be valid");
             error_para.appendChild(error);
         }
@@ -197,13 +198,14 @@ $(document).ready(function() {
             type: "POST", 
             contentType: "application/json; charset=UTF-8",
             data: JSON.stringify({
-                "username" : document.getElementById("new_username_input"),
-                "firstname" : document.getElementById("new_firstname_input"),
-                "lastname" :  document.getElementById("new_lastname_input"),
-                "email" : document.getElementById("new_email_input"),
-                "password1" : document.getElementById("new_password1_input"),
-                "password2" : document.getElementById("new_password2_input")
+                "username" : document.getElementById("new_username_input").value,
+                "firstname" : document.getElementById("new_firstname_input").value,
+                "lastname" :  document.getElementById("new_lastname_input").value,
+                "email" : document.getElementById("new_email_input").value,
+                "password1" : document.getElementById("new_password1_input").value,
+                "password2" : document.getElementById("new_password2_input").value
             }), 
+            response: "application/json",
             url : url,
 
             success : function(data) {
@@ -212,8 +214,10 @@ $(document).ready(function() {
                 window.location.replace("http://localhost:3000/gu4wdnfe/p3/api/v1")
                 },
             error : function(response) {
-                var response = JSON.parse(response);
-                var my_errors = response['errors'];
+                console.log(response)
+                var my_errors = []
+                my_errors = response.responseText['errors'];
+                console.log(my_errors);
                 var error_message = "";
                 var page = document.getElementById("content");
 
@@ -229,5 +233,4 @@ $(document).ready(function() {
             }
             });
          });
-    event.preventDefault();
 });
