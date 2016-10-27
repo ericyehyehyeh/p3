@@ -13,13 +13,13 @@ $(document).ready(function() {
         url: url,
         success : function(data) {
             
-            var query = window.location.href.indexOf('=');
+            var query = window.location.href.indexOf('url=');
             var link = "";
             if (query == -1){
                 window.location.replace("http://localhost:3000/gu4wdnfe/p3")
             }
             else{
-                link = window.location.href.split('=')[1];
+                link = window.location.href.split('url=')[1];
                 window.location.replace(link);
             }
 
