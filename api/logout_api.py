@@ -20,3 +20,12 @@ def logout_route():
     				]
     			}
 		return jsonify(json_error), 401
+
+
+
+
+
+
+
+
+

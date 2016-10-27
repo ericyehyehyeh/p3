@@ -33,17 +33,17 @@ def user_route():
 
 	print "we're here correct?"
 
-	return render_template("user.html")
+	return render_template("user.html", **options)
 
 @user.route('/user/edit', methods = ['GET','POST'])
 def edit_user():
 
-	# db = connect_to_database()
-	# cur = db.cursor()
-	# host = env['host']
-	# port = env['port']
+	db = connect_to_database()
+	cur = db.cursor()
+	host = env['host']
+	port = env['port']
 
-	# logged_in = False
+	logged_in = False
 
 	if 'username' in session:
 		logged_in = True
@@ -51,14 +51,14 @@ def edit_user():
 		return redirect("/gu4wdnfe/p3/login")
 
 
-	# options = {
-	# 	"new_user": False,
-	# 	"edit_user": True,
-	# 	"logged_in": logged_in
-	# }
+	options = {
+		"new_user": False,
+		"edit_user": True,
+		"logged_in": logged_in
+	}
 
-	print "Rendering user template, should not be happening"
 
-	return render_template("user.html")
+
+	return render_template("user.html", **options)
 
 

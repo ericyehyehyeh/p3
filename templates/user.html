@@ -3,64 +3,49 @@
 {% block title %}User Page{% endblock %}
 
 {% block center %}
-	{% if new_user %}
-	<h1>Create An Account</h1>
-	{% endif %}
-	{% if edit_user %}
-	<h1>Edit Your Account</h1>
-	{% endif %}
+    {% if new_user %}
+    <h1>Create An Account</h1>
+    {% endif %}
+    {% if edit_user %}
+    <h1>Edit Your Account</h1>
+    {% endif %}
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.js"></script>
     <script type="text/javascript" src="/static/js/user.js"></script>
 
-	</br>
+    </br>
 
-	{% if new_user %}
-		<form id="new_submit">
+    {% if new_user %}
+        <form id="new_user">
 
-        	<!-- <input id="new_username_input" type="text" placeholder="Username" name="username" value="">
-        	
+            <input id="new_username_input" type="text" placeholder="Username" name="username" value="">
+            
+            </br>
+            </br>
+            
+            <input id="new_firstname_input" type="text" placeholder="Firstname" name="firstname" value="">
+            
+            <input id="new_lastname_input" type="text" placeholder="Lastname" name="lastname" value="">
+            
+            </br>
+            </br>
+            <input id="new_password1_input" type="password" placeholder="Password" name="password1" value="">
+            
+            <input id="new_password2_input" type="password" placeholder="Re-enter Password" name="password2" value="">
+            
+            </br>
+            </br>
+            
+            <input id="new_email_input" type="text" placeholder="Email" name="email" value="">
 
-        	</br>
-        	</br>
-        	
-        	<input id="new_firstname_input" type="text" placeholder="Firstname" name="firstname" value="">
-        	
-
-        	<input id="new_lastname_input" type="text" placeholder="Lastname" name="lastname" value="">
-        	
-
-        	</br>
-        	</br>
-
-        	<input id="new_password1_input" type="password" placeholder="Password" name="password1" value="">
-         	
-         	<input id="new_password2_input" type="password" placeholder="Re-enter Password" name="password2" value="">
-         	
-
-        	</br>
-        	</br>
-         	
-         	<input id="new_email_input" type="text" placeholder="Email" name="email" value="">
-         	{% if email_blank %}
-        	<h6><p class="error">Email may not be left blank</p></h6>
-        	{% endif %}
-        	{% if email_long %}
-        	<h6><p class="error">Email must be no longer than 40 characters</p></h6>
-        	{% endif %}
-        	{% if email_invalid %}
-        	<h6><p class="error">Email address must be valid</p></h6>
-        	{% endif %}
-
-        	</br>
-        	</br>
-
-        	<input type="submit" value="Submit"> -->
+            </br>
+            </br>
+            <input id="new_submit" type="submit" value="Submit">
 
             <div id="new_user_input">
             </div>
-      	</form>
-
+        </form>
+        <p class="error" id="error"></p>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script type="text/javascript" src="/static/js/user.js"></script>
@@ -69,34 +54,34 @@
 
 
 
-	{% endif %}
-	{% if edit_user %}
-		<form id="edit_submit" action="/gu4wdnfe/p3/user/edit" method="POST">
-        	<!-- <input id="update_firstname_input" type="text" placeholder="Firstname" name="firstname" value="">
-        	<input id="update_firstname_submit" type="submit" value="Submit">
-        	
-        	<input id="update_lastname_input" type="text" placeholder="Last Name" name="lastname" value="">
-        	<input id="update_lastname_submit" type="submit" value="Submit">
-        	
-        	<input id="update_email_input" type="text" placeholder="Email" name="email" value="">
-        	<input id="update_email_submit" type="submit" value="Submit">
-        	
-         	<input id="update_password1_input" type="password" placeholder="First Password" name="password1" value="">
-         	<input id="update_password2_input" type="password" placeholder="Re-enter Password" name="password2">
-        	<input id="update_password_submit" type="submit" value="Submit"> -->
+    {% endif %}
+    {% if edit_user %}
+        <form id="update_user">
+            <input id="update_firstname_input" type="text" placeholder="Firstname" name="firstname" value="">
+            
+            <input id="update_lastname_input" type="text" placeholder="Last Name" name="lastname" value="">
+            
+            <input id="update_email_input" type="text" placeholder="Email" name="email" value="">
+            
+            <input id="update_password1_input" type="password" placeholder="First Password" name="password1" value="">
+            <input id="update_password2_input" type="password" placeholder="Re-enter Password" name="password2">
+
+            <input id="update_submit" type="submit" value="Submit">
 
             <div id="edit_submit_input">
             </div>
-        	
-      	</form>
+            
+        </form>
+        <p class="error" id="error"></p>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script type="text/javascript" src="/static/js/user.js"></script>
 
-	{% endif %}
+    {% endif %}
 
 
 
 {% endblock %}
+
 
 
 
