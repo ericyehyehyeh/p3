@@ -13,7 +13,7 @@
 	</br>
 
 	{% if new_user %}
-		<form action="/gu4wdnfe/p3/user" method="POST">
+		<form id="new_submit">
 
         	<input id="new_username_input" type="text" placeholder="Username" name="username" value="">
         	{% if username_blank %}
@@ -91,7 +91,7 @@
         	</br>
         	</br>
 
-        	<input id="new_submit" type="submit" value="Submit">
+        	<input type="submit" value="Submit">
       	</form>
 
 

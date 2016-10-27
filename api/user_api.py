@@ -16,6 +16,7 @@ def user_route():
 	cur = db.cursor()
 	host = env['host']
 	port = env['port']
+	json_error = {}
 
 
 #GET REQUEST OPTION
@@ -201,10 +202,9 @@ def user_route():
 			return jsonify(username=username,firstname=firstname, lastname=lastname, password1=password1, password2=password2, email=email), 201
 
 
-		print "errors exist"
-		json_error = {
-				"errors": errors 
-    			}
+	
+		json_error = {"errors": errors}
+
     	return jsonify(json_error), 422
 
 

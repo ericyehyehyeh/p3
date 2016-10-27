@@ -10,6 +10,7 @@ login_api = Blueprint('login_api', __name__, template_folder='templates', url_pr
 
 @login_api.route('/api/v1/login', methods=['POST'])
 def login_route():
+
 	data = request.get_json()
 	username = data['username']
 	password = data['password']
@@ -27,10 +28,10 @@ def login_route():
 	db = connect_to_database()
 	cur = db.cursor()
 	host = env['host']
-  	port = env['port']
+	port = env['port']
 
-	cur.execute('SELECT password FROM user WHERE username = %s', [username])
-	usernameResult = cur.fetchall()
+  	cur.execute("SELECT password FROM user WHERE username = %s", [username])
+  	usernameResult = cur.fetchall()
 
 	if not bool(usernameResult):
 		json_error = {

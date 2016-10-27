@@ -98,6 +98,7 @@
 					{% if logged_in %}
 					<h3>Logged in as {{firstname}} {{lastname}}</h3>
 					{% endif %}
+
 					</div>
 				</h1>
 
@@ -111,6 +112,9 @@
 				<div id="content">
 					<div class="innertube">
 					
+					{% if 'username' not in session %}
+					<a href="/gu4wdnfe/p3/login?url={{request.url}}">Login</a>
+					{% endif %}
 					
 
 					{% block center %}
@@ -121,14 +125,14 @@
 
 						<p class = "center"> Welcome! This website is a great way to save, organize, and share your photos! Feel free to upload and delete as many as you photos and albums as you please.</p>	
 
-						{% if not logged_in %}
-						<li><a id="home_login" href="/gu4wdnfe/p3/login">Login</a></li>
+						{% if 'username' not in session %}
+						<li><a id="home_login" href="/gu4wdnfe/p3/login?url={{request.url}}">Login</a></li>
 						</br>
 						<li><a id="home_user_create" href="/gu4wdnfe/p3/user">Create An Account</a></li>
 						{% endif %}
 				
 					{% endif %}
-					{% if logged_in %}
+					{% if 'username' in session %}
 						{% for result in pub_user_albums %}
 							<li><a id="album_{{result['albumid']}}_link" href="/gu4wdnfe/p3/album?albumid={{result['albumid']}}">{{result['title']}}</a></li>
 						{% endfor %}
@@ -156,7 +160,7 @@
 					<ul>
 						<li><a id="nav_home" href="/gu4wdnfe/p3">Nav Home</a></li>
 
-						{% if logged_in %}
+						{% if 'username' in session %}
 							<li><a id="nav_edit" href="/gu4wdnfe/p3/user/edit">Edit Account</a></li>
 							<li><a id="nav_albums" href="/gu4wdnfe/p3/albums">My Albums</a></li>
 							<form action="/gu4wdnfe/p3/logout" method="POST">
