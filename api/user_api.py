@@ -4,6 +4,7 @@ from config import *
 import hashlib
 import uuid
 import os
+import re
 
 user_api = Blueprint('user_api', __name__, template_folder='templates', url_prefix='/gu4wdnfe/p3')
 
@@ -125,6 +126,7 @@ def user_route():
 			sql_username = sql_username['username']
 			if username.lower() == sql_username.lower():
 				errors.append({"message": "This username is taken"})
+				error = True
 
 		if len(username) < 3:
 			errors.append({"message": "Usernames must be at least 3 characters long"})
@@ -211,6 +213,7 @@ def user_route():
 
 	#PUT REQUEST OPTION
 	if request.method == 'PUT':
+		print "put path"
 		user_input = request.get_json()
 		page_firstname = ""
 		page_lastname = ""
@@ -246,6 +249,7 @@ def user_route():
 			return jsonify(json_error), 422
 
 
+		print "no errors continuing"
 		if 'username' in session:
 			logged_in = True
 			current_username = session['username']
@@ -260,24 +264,25 @@ def user_route():
 			return jsonify(json_error), 401
 
 
-		email = user_input['email']
-		cur.execute("SELECT username FROM user WHERE email = %s",[email])
-		query = cur.fetchall()
-		username = query[0]['username']
+		#print "fetching username"
+		#email = user_input['email']
+		#cur.execute("SELECT username FROM user WHERE email = %s",[email])
+		#query = cur.fetchall()
+		#username = query[0]['username']
 
-		error = False
-		errors = []
+		#error = False
+		#errors = []
 
 
-		if username != current_username:
-			json_error = {
-				"errors":[
-						{
-							"message": "You do not have the necessary permissions for the resource"
-						}
-					]
-				}
-			return jsonify(json_error), 403
+		#if username != current_username:
+		#	json_error = {
+		#		"errors":[
+		#				{
+		#					"message": "You do not have the necessary permissions for the resource"
+		#				}
+		#			]
+		#		}
+		#	return jsonify(json_error), 403
 
 
 		if user_input['firstname']:
