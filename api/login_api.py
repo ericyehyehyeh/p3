@@ -9,7 +9,7 @@ login_api = Blueprint('login_api', __name__, template_folder='templates', url_pr
 
 
 @login_api.route('/api/v1/login', methods=['POST'])
-def login_route():
+def login_api_route():
 
 	data = request.get_json()
 	username = data['username']
