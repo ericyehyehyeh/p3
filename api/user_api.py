@@ -58,33 +58,53 @@ def user_route():
 
 		user_input = request.get_json()
 
+		print "pre json input 2"
+
 		field_error = False
 
+		print "pre json input 3"
+
 		if 'username' not in user_input:
+			print "username error"
 			field_error = True
 
-    	elif 'firstname' not in user_input:
-			field_error == True
 
-    	elif 'lastname' not in user_input:
-			field_error == True
+		print "pre json input 4"
 
-    	elif 'password1' not in user_input:
-			field_error == True
+		if 'firstname' not in user_input:
+			print "firstname error"
+			field_error = True
 
-    	elif 'password2' not in user_input:
-			field_error == True
-			
+		print "pre json input 5"
 
-    	if field_error == True:
-    		json_error = {
-				"errors":[
-						{
-							"message": "You did not provide the necessary fields"
-    					}
-    				]
-    			}
-    		return jsonify(json_error), 422
+		if 'lastname' not in user_input:
+			print "lastname error"
+			field_error = True
+
+		print "pre json input 6"
+
+		if 'password1' not in user_input:
+			print "password1 error"
+			field_error = True
+
+		if 'password2' not in user_input:
+			print "password2 error"
+			field_error = True
+
+		print "pre json input 7"
+		print "pre json input 3"
+
+		#if 'password2' not in user_input:
+			#print "password2 error"
+			#field_error = True
+
+		print "field error"
+		print field_error
+
+		if field_error == True:
+			print "inside field error true"
+			json_error = {"errors":[{"message": "You did not provide the necessary fields"}]}
+			return jsonify(json_error), 422
 
 
 		username = user_input['username']
@@ -93,7 +113,7 @@ def user_route():
 		password1 = user_input['password1']
 		password2 = user_input['password2']
 		email = user_input['email']
-
+		
 		print "post json input"
 		errors = []
 		
@@ -182,10 +202,10 @@ def user_route():
 			return jsonify(username=username,firstname=firstname, lastname=lastname, password1=password1, password2=password2, email=email), 201
 
 
-	
+
 		json_error = {"errors": errors}
 
-    	return jsonify(json_error), 422
+		return jsonify(json_error), 422
 
 
 
@@ -197,6 +217,35 @@ def user_route():
 		password = ""
 		password1 = ""
 
+
+		field_error = False
+
+		if 'firstname' not in user_input:
+			print "firstname error"
+			field_error = True
+
+		if 'lastname' not in user_input:
+			print "lastname error"
+			field_error = True
+
+		if 'email' not in user_input:
+			print "email error"
+			field_error = True
+
+		if 'password1' not in user_input:
+			print "password1 error"
+			field_error = True
+
+		if 'password2' not in user_input:
+			print "password2 error"
+			field_error = True
+
+		if field_error == True:
+			print "inside field error true"
+			json_error = {"errors":[{"message": "You did not provide the necessary fields"}]}
+			return jsonify(json_error), 422
+
+
 		if 'username' in session:
 			logged_in = True
 			current_username = session['username']
@@ -205,27 +254,30 @@ def user_route():
 				"errors":[
 						{
 							"message": "You do not have the necessary credentials for the resource"
-    					}
-    				]
-    			}
-    		return jsonify(json_error), 401
+						}
+					]
+				}
+			return jsonify(json_error), 401
 
+
+		email = user_input['email']
+		cur.execute("SELECT username FROM user WHERE email = %s",[email])
+		query = cur.fetchall()
+		username = query[0]['username']
 
 		error = False
 		errors = []
 
-		username = user_input['username']
-		password2 = user_input['password2']
 
 		if username != current_username:
 			json_error = {
 				"errors":[
 						{
 							"message": "You do not have the necessary permissions for the resource"
-    					}
-    				]
-    			}
-    		return jsonify(json_error), 403
+						}
+					]
+				}
+			return jsonify(json_error), 403
 
 
 		if user_input['firstname']:
@@ -242,7 +294,7 @@ def user_route():
 
 		if user_input['password1']:
 			password1 = user_input['password1']
-			if(len(password1) != 0) and (len(password2) != 0):
+			if (len(password1) != 0) and (len(password2) != 0):
 				if len(password1) < 8:
 					errors.append({"message": "Passwords must be at least 8 characters long"})
 					error = True
@@ -259,6 +311,7 @@ def user_route():
 					errors.append({"message": "Usernames may only contain letters, digits, and underscores"})
 					error = True
 
+
 		if user_input['email']:
 			email = user_input['email']
 			if len(email) > 40:
@@ -272,6 +325,7 @@ def user_route():
 
 		if not error:
 			#create hashed password:
+			print "ARE WE HEREEE?????"
 			algorithm = 'sha512'     
 			password = password1   
 			salt = uuid.uuid4().hex 
@@ -283,12 +337,16 @@ def user_route():
 			final_password = "$".join([algorithm,salt,password_hash])
 
 			if user_input['firstname']:
+				print "update username"
 				cur.execute("UPDATE user SET firstname = %s WHERE username = %s", [firstname, current_username])
 			if user_input['lastname']:
+				print "update lastname"
 				cur.execute("UPDATE user SET lastname = %s WHERE username = %s", [lastname, current_username])
 			if user_input['password1']:
+				print "update firstname"
 				cur.execute("UPDATE user SET password = %s WHERE username = %s", [final_password, current_username])
 			if user_input['email']:
+				print "update email"
 				cur.execute("UPDATE user SET email = %s WHERE username = %s", [email, current_username])
 
 
@@ -297,24 +355,8 @@ def user_route():
 
 		json_error = {
 				"errors": errors 
-    			}
+				}
 		return jsonify(json_error), 422
-
-
-
-
-
-#IF EMPTY REQUEST OPTION
-	elif request.method == "":
-		json_error = {
-				"errors":[
-						{
-							"message": "You did not provide the necessary fields"
-    					}
-    				]
-    			}
-    		return jsonify(error = json_error), 422
-
 
 
 

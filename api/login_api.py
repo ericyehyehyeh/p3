@@ -30,7 +30,7 @@ def login_api_route():
 	host = env['host']
 	port = env['port']
 
-  	cur.execute("SELECT password FROM user WHERE username = %s", [username])
+  	cur.execute("SELECT password, firstname, lastname FROM user WHERE username = %s", [username])
   	usernameResult = cur.fetchall()
 
 	if not bool(usernameResult):
@@ -45,6 +45,8 @@ def login_api_route():
 
 	else:
 		sqlPassword = usernameResult[0]['password']
+		firstname = usernameResult[0]['firstname']
+		lastname = usernameResult[0]['lastname']
 		mytuple = sqlPassword.rsplit('$',2)
 		algorithm = mytuple[0]    
 		salt = mytuple[1] 
@@ -55,6 +57,8 @@ def login_api_route():
 
 		if final_password == sqlPassword:
 			session['username'] = username
+			session['firstname'] = firstname
+			session['lastname'] = lastname
 			return jsonify(username=username, password=password)
 		else:
 			json_error = {

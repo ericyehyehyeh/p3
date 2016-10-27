@@ -4,7 +4,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<link rel="stylesheet" href="/static/css/style.css" />
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.js"></script>
 
 		<title>Eecs485</title>
 		
@@ -92,15 +92,13 @@
 		<header id="header">
 			<div class="innertube">
 			
-				<h1>Eecs 485
-				<br/>
+				<h1>Eecs 485</h1>
 					<div id = "name">
-					{% if logged_in %}
-					<h3>Logged in as {{firstname}} {{lastname}}</h3>
+					{% if 'username' in session %}
+					<h4>Logged in as {{session['firstname']}} {{session['lastname']}}</h4>
 					{% endif %}
-
 					</div>
-				</h1>
+				
 
 			</div>
 		</header>
