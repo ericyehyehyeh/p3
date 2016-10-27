@@ -114,7 +114,7 @@ function loadURL() {
 
                 //fill in edit link
                 var album_edit = document.createElement("a");
-                var link = "http://localhost:3000/gu4wdnfe/p3/album/edit?albumid="+albumid;
+                var link = "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/album/edit?albumid="+albumid;
                 album_edit.href = link;
                 album_edit.innerHTML = "EDIT<br>";
 
