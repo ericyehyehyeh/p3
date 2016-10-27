@@ -10,20 +10,20 @@ login_api = Blueprint('login_api', __name__, template_folder='templates', url_pr
 
 @login_api.route('/api/v1/login', methods=['POST'])
 def login_api_route():
-
 	data = request.get_json()
-	username = data['username']
-	password = data['password']
 
-	if request.method == "":
+	if not 'password' in data or not 'username' in data:
 		json_error = {
 			"errors":[
 						{
 							"message": "You did not provide the necessary fields"
     					}
-    				]
+   	 				]
     			}
-		return jsonify(error = json_error), 422
+		return jsonify(json_error), 422
+	
+	username = data['username']
+	password = data['password']
 	
 	db = connect_to_database()
 	cur = db.cursor()
@@ -41,7 +41,7 @@ def login_api_route():
     					}
   					]
 				}
-		return jsonify(error=json_error), 404
+		return jsonify(json_error), 404
 
 	else:
 		sqlPassword = usernameResult[0]['password']
