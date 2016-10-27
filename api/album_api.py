@@ -11,7 +11,7 @@ album_api = Blueprint('album_api', __name__, template_folder='templates', url_pr
 
 @album_api.route('/api/v1/album/<albumid>', methods=['GET'])
 def album_route(albumid):
-
+	print ("album api called with album " + albumid)
 	db = connect_to_database()
 	cur = db.cursor()
 	host = env['host']
@@ -20,6 +20,7 @@ def album_route(albumid):
 	current_username = ""
 	firstname = ""
 	lastname = ""
+	logged_in = False
 
 	if 'username' in session:
 		current_username = session['username']
@@ -27,8 +28,9 @@ def album_route(albumid):
 		query = cur.fetchall()
 		firstname = query[0]['firstname']
 		lastname = query[0]['lastname']
+		logged_in = True
 
-
+	print "made it this far"
 	grant_access = False
 	owner_rights = False
 	public = False
@@ -39,16 +41,19 @@ def album_route(albumid):
 
 	cur.execute("SELECT * FROM album WHERE albumid = %s" , [albumid])
 	invalidUser = cur.fetchall()
-	if not bool(invalidUser):
-		json_error = {
-				"errors":[
-						{
-							"message": "The requested resource could not be found"
-    					}
-    				]
-    			}
-    	return jsonify(json_error), 404
+	print invalidUser
 
+
+	if not bool(invalidUser):
+		print "entered if statement"
+		json_error = {
+			"errors":[
+						{
+							"message": "You did not provide the necessary fields"
+    					}
+   	 				]
+    	}
+		return jsonify(json_error), 404
 
 	cur.execute("SELECT username, access from album where albumid = %s", [albumid])
 	allowed_access = cur.fetchall()
@@ -79,7 +84,7 @@ def album_route(albumid):
     					}
     				]
     			}
-    	return jsonify(json_error), 403
+		return jsonify(json_error), 403
     	
 	if (logged_in == False) and (public == False):
 		json_error = {
@@ -89,7 +94,7 @@ def album_route(albumid):
     					}
     				]
     			}
-    	return jsonify(json_error), 401
+		return jsonify(json_error), 401
 
 
 	cur.execute('SELECT username FROM user')
