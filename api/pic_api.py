@@ -255,7 +255,7 @@ def pic_route(picid):
 	 			"prev": prev_pic
 			}
 
-			return jsonify(json_data), 200
+			return jsonify(json_data)
 
 
 

@@ -9,7 +9,7 @@ user_api = Blueprint('user_api', __name__, template_folder='templates', url_pref
 
 
 
-@user_api.route('/api/v1/user', methods=['GET', 'POST'])
+@user_api.route('/api/v1/user', methods=['GET', 'POST', 'PUT'])
 def user_route():
 
 	db = connect_to_database()
@@ -56,6 +56,64 @@ def user_route():
 		print "pre json input"
 
 		user_input = request.get_json()
+
+		if 'username' not in user_input:
+			json_error = {
+				"errors":[
+						{
+							"message": "You did not provide the necessary fields"
+    					}
+    				]
+    			}
+    		return jsonify(json_error), 422
+    	if 'firstname' not in user_input:
+			json_error = {
+				"errors":[
+						{
+							"message": "You did not provide the necessary fields"
+    					}
+    				]
+    			}
+    		return jsonify(json_error), 422
+    	if 'lastname' not in user_input:
+			json_error = {
+				"errors":[
+						{
+							"message": "You did not provide the necessary fields"
+    					}
+    				]
+    			}
+    		return jsonify(json_error), 422
+    	if 'password1' not in user_input:
+			json_error = {
+				"errors":[
+						{
+							"message": "You did not provide the necessary fields"
+    					}
+    				]
+    			}
+    		return jsonify(json_error), 422
+    	if 'password2' not in user_input:
+			json_error = {
+				"errors":[
+						{
+							"message": "You did not provide the necessary fields"
+    					}
+    				]
+    			}
+    		return jsonify(json_error), 422
+    	if 'email' not in user_input:
+			json_error = {
+				"errors":[
+						{
+							"message": "You did not provide the necessary fields"
+    					}
+    				]
+    			}
+    		return jsonify(json_error), 422
+
+
+
 		username = user_input['username']
 		firstname = user_input['firstname']
 		lastname = user_input['lastname']
@@ -75,30 +133,39 @@ def user_route():
 			if username.lower() == sql_username.lower():
 				errors.append({"message": "This username is taken"})
 
-		print "error checking 2"
+		if len(username) < 3:
+			errors.append({"message": "Usernames must be at least 3 characters long"})
+			error = True
+		if not re.match("^[\w\d_]*$", password1):
+			errors.append({"message": "Usernames may only contain letters, digits, and underscores"})
+			error = True
+		if len(password1) < 8:
+			errors.append({"message": "Passwords must be at least 8 characters long"})
+			error = True
+		if not re.match("^(?=.*[a-zA-z])(?=.*\d)", password1):
+			errors.append({"message": "Passwords must contain at least one letter and one number"})
+			error = True
 		if not re.match("^[\w\d_]*$", username):
 			errors.append({"message": "Passwords may only contain letters, digits, and underscores"})
 			error = True
 
+
+
+		print "error checking 2"
+		
+			
+
 		print "error checking 3"
-		if not re.match("^(?=.*[a-zA-z])(?=.*\d)", password1):
-			errors.append({"message": "Passwords must contain at least one letter and one number"})
-			error = True
+		
 
 		print "error checking 4"
-		if not re.match("^[\w\d_]*$", password1):
-			errors.append({"message": "Usernames may only contain letters, digits, and underscores"})
-			error = True
+		
 
 		print "error checking 5"
-		if len(username) < 3:
-			errors.append({"message": "Usernames must be at least 3 characters long"})
-			error = True
+		
 
 		print "error checking 6"
-		if len(password1) < 8:
-			errors.append({"message": "Passwords must be at least 8 characters long"})
-			error = True
+		
 
 		print "error checking 7"
 		if len(email) > 40:
@@ -170,23 +237,6 @@ def user_route():
 
 
 
-    
-	#IF EMPTY REQUEST OPTION
-	if (request.method == ''):
-		json_error = {
-				"errors":[
-						{
-							"message": "You did not provide the necessary fields"
-    					}
-    				]
-    			}
-    	return jsonify(json_error), 422
-
-
-
-@user_api.route('/api/v1/user/edit', methods=['PUT'])
-def user_edit_route():
-		
 	#PUT REQUEST OPTION
 	if request.method == 'PUT':
 		user_input = request.get_json()
@@ -250,6 +300,9 @@ def user_edit_route():
 				errors.append({"message": "Passwords must contain at least one letter and one number"})
 				error = True
 			if not re.match("^[\w\d_]*$", password1):
+				errors.append({"message": "Passwords may only contain letters, digits, and underscores"})
+				error = True
+			if not re.match("^[\w\d_]*$", username):
 				errors.append({"message": "Usernames may only contain letters, digits, and underscores"})
 				error = True
 

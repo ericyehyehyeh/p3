@@ -12,7 +12,6 @@ album_api = Blueprint('album_api', __name__, template_folder='templates', url_pr
 @album_api.route('/api/v1/album/<albumid>', methods=['GET'])
 def album_route(albumid):
 
-	albumid = albumid;
 	db = connect_to_database()
 	cur = db.cursor()
 	host = env['host']

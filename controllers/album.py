@@ -232,6 +232,24 @@ def album_edit_route():
 @album.route('/album', methods=['GET', 'POST'])
 def album_route():
 
+	db = connect_to_database()
+	cur = db.cursor()
+
+	specific_login = False
+
+	current_username = ""
+
+	if 'username' in session:
+		specific_login = True
+		current_username = session['username']
+
+	if current_username == "":
+		specific_login = False
+
+	options = {
+		"specific_login": specific_login
+	}
+
 
 
 	return render_template("single_page.html", **options)
