@@ -4,7 +4,7 @@ $(document).ready(function() {
     //EDIT ROUTE
     $("#update_user").submit(function(event) {
         event.preventDefault();
-        var url = "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/api/v1/user";
+        var url = "http://localhost:3000/gu4wdnfe/p3/api/v1/user";
         $( ".error" ).remove();
 
 
@@ -33,37 +33,45 @@ $(document).ready(function() {
                 error_para.setAttribute("class", "error");
                 var error = "";
 
+                var password_error = true;
+                if (password1.length == 0) & (password2.length == 0){
+                    password_error = false;
+                }
                 var errors = false;
 
                 var re_underscore = /^[a-zA-Z0-9_]+$/;
-                if (password1.length < 8){
-                    error = document.createTextNode("Passwords must be at least 8 characters long");
-                    error_para.appendChild(error);
-                    linebreak = document.createElement("br");
-                    error_para.appendChild(linebreak);
-                    errors = true;
+                if (password_error == true){
+                    if (password1.length < 8){
+                        error = document.createTextNode("Passwords must be at least 8 characters long");
+                        error_para.appendChild(error);
+                        linebreak = document.createElement("br");
+                        error_para.appendChild(linebreak);
+                        errors = true;
+                    }
                 }
                 var re_letternum = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
-                if (!re_letternum.test(password1)){
-                    error = document.createTextNode("Passwords must contain at least one letter and one number");
-                    error_para.appendChild(error);
-                    linebreak = document.createElement("br");
-                    error_para.appendChild(linebreak);
-                    errors = true;
-                }
-                if (!re_underscore.test(password1)){
-                    error = document.createTextNode("Passwords may only contain letters, digits, and underscores");
-                    error_para.appendChild(error);
-                    linebreak = document.createElement("br");
-                    error_para.appendChild(linebreak);
-                    errors = true;
-                }
-                if (password1 != password2){
-                    error = document.createTextNode("Passwords do not match");
-                    error_para.appendChild(error);
-                    linebreak = document.createElement("br");
-                    error_para.appendChild(linebreak);
-                    errors = true;
+                if (password_error == true){
+                    if (!re_letternum.test(password1)){
+                        error = document.createTextNode("Passwords must contain at least one letter and one number");
+                        error_para.appendChild(error);
+                        linebreak = document.createElement("br");
+                        error_para.appendChild(linebreak);
+                        errors = true;
+                    }
+                    if (!re_underscore.test(password1)){
+                        error = document.createTextNode("Passwords may only contain letters, digits, and underscores");
+                        error_para.appendChild(error);
+                        linebreak = document.createElement("br");
+                        error_para.appendChild(linebreak);
+                        errors = true;
+                    }
+                    if (password1 != password2){
+                        error = document.createTextNode("Passwords do not match");
+                        error_para.appendChild(error);
+                        linebreak = document.createElement("br");
+                        error_para.appendChild(linebreak);
+                        errors = true;
+                    }
                 }
                 var re_email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 if (!re_email.test(email)){
@@ -116,7 +124,7 @@ $(document).ready(function() {
                             console.log("it worked! put");
                             console.log(data);
                             console.log("Successfully updated user information!")
-                            window.location.replace("http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/login");
+                            window.location.replace("http://localhost:3000/gu4wdnfe/p3/login");
                         },
 
                         error : function(response) {
@@ -179,7 +187,7 @@ $(document).ready(function() {
     $("#new_user").submit(function(event) {
 
         event.preventDefault();
-        var url = "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/api/v1/user";
+        var url = "http://localhost:3000/gu4wdnfe/p3/api/v1/user";
         $( ".error" ).remove();
 
         var username = document.getElementById("new_username_input").value;
@@ -306,7 +314,7 @@ $(document).ready(function() {
                 success : function(data) {
                     console.log("it worked! post");
                     console.log(data);
-                    window.location.replace("http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/api/v1")
+                    window.location.replace("http://localhost:3000/gu4wdnfe/p3/api/v1")
                     },
                 error : function(response) {
                     var response2 = JSON.parse(response.responseText);
