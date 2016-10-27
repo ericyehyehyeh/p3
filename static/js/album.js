@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    var url = "http://localhost:3000/gu4wdnfe/p3/api/v1/album";
+    var url = "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/api/v1/album";
 
 
     //returns -1 if string not found
@@ -129,7 +129,7 @@ $(document).ready(function() {
                             "next": next, 
                             "prev": prev
                         }), 
-                        url: "http://localhost:3000/gu4wdnfe/p3/api/v1/pic/"+picid,
+                        url: "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/api/v1/pic/"+picid,
                         success : function(data) {
                             },
                         error : function(error) {
