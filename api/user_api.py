@@ -57,61 +57,33 @@ def user_route():
 
 		user_input = request.get_json()
 
-		if 'username' not in user_input:
-			json_error = {
-				"errors":[
-						{
-							"message": "You did not provide the necessary fields"
-    					}
-    				]
-    			}
-    		return jsonify(json_error), 422
-    	if 'firstname' not in user_input:
-			json_error = {
-				"errors":[
-						{
-							"message": "You did not provide the necessary fields"
-    					}
-    				]
-    			}
-    		return jsonify(json_error), 422
-    	if 'lastname' not in user_input:
-			json_error = {
-				"errors":[
-						{
-							"message": "You did not provide the necessary fields"
-    					}
-    				]
-    			}
-    		return jsonify(json_error), 422
-    	if 'password1' not in user_input:
-			json_error = {
-				"errors":[
-						{
-							"message": "You did not provide the necessary fields"
-    					}
-    				]
-    			}
-    		return jsonify(json_error), 422
-    	if 'password2' not in user_input:
-			json_error = {
-				"errors":[
-						{
-							"message": "You did not provide the necessary fields"
-    					}
-    				]
-    			}
-    		return jsonify(json_error), 422
-    	if 'email' not in user_input:
-			json_error = {
-				"errors":[
-						{
-							"message": "You did not provide the necessary fields"
-    					}
-    				]
-    			}
-    		return jsonify(json_error), 422
+		field_error = False
 
+		if 'username' not in user_input:
+			field_error = True
+
+    	elif 'firstname' not in user_input:
+			field_error == True
+
+    	elif 'lastname' not in user_input:
+			field_error == True
+
+    	elif 'password1' not in user_input:
+			field_error == True
+
+    	elif 'password2' not in user_input:
+			field_error == True
+			
+
+    	if field_error == True:
+    		json_error = {
+				"errors":[
+						{
+							"message": "You did not provide the necessary fields"
+    					}
+    				]
+    			}
+    		return jsonify(json_error), 422
 
 
 		username = user_input['username']
