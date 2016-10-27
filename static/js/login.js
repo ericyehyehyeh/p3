@@ -3,6 +3,8 @@ $(document).ready(function() {
     $("#loginForm").submit(function(event) {
     event.preventDefault();
     var url = "http://localhost:3000/gu4wdnfe/p3/api/v1/login";
+    document.getElementById("error").innerHTML = "";
+
     $.ajax({
         type: "POST", 
         contentType: "application/json; charset=UTF-8",
@@ -27,15 +29,15 @@ $(document).ready(function() {
             
             },
         error : function(response) {
+            //alert(response.reponseText);
             var response2 = JSON.parse(response.responseText);
-            alert(response2);
             var my_errors = response2['errors'];
             var error_message = "";
-            var page = document.getElementById("content").value;
 
+            //Put page up at top and every time you submit now it clears the content
+            var page = document.getElementById("error");
             for (i = 0; i < my_errors.length; i++){
                 error_message = my_errors[i]['message'];
-
                 var error_para = document.createElement("p");
                 error_para.setAttribute("class", "error");
                 var error = document.createTextNode(error_message);
