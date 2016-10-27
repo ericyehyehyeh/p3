@@ -113,7 +113,7 @@
 					<div class="innertube">
 					
 					{% if 'username' not in session %}
-					<a href="/gu4wdnfe/p3/login?url={{request.url}}">Login</a>
+					<a id="home_login" href="/gu4wdnfe/p3/login?url={{request.url}}">Login</a>
 					{% endif %}
 					
 
@@ -126,7 +126,7 @@
 						<p class = "center"> Welcome! This website is a great way to save, organize, and share your photos! Feel free to upload and delete as many as you photos and albums as you please.</p>	
 
 						{% if 'username' not in session %}
-						<li><a id="home_login" href="/gu4wdnfe/p3/login?url={{request.url}}">Login</a></li>
+						<!--<li><a id="home_login" href="/gu4wdnfe/p3/login?url={{request.url}}">Login</a></li>-->
 						</br>
 						<li><a id="home_user_create" href="/gu4wdnfe/p3/user">Create An Account</a></li>
 						{% endif %}
