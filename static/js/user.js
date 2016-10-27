@@ -21,11 +21,7 @@ $(document).ready(function() {
                 var email = document.getElementById("update_email_input").value;
                 var password1 = document.getElementById("update_password1_input").value;
                 var password2 = document.getElementById("update_password2_input").value;
-                document.getElementById("update_firstname_input").value = "";
-                document.getElementById("update_lastname_input").value = "";
-                document.getElementById("update_email_input").value = "";
-                document.getElementById("update_password1_input").value = "";
-                document.getElementById("update_password2_input").value = "";
+                
 
 
                 var page = document.getElementById("content");
@@ -153,7 +149,6 @@ $(document).ready(function() {
                             }
                     });
                 }
-
                 
                 },
             error : function(response) {
@@ -290,7 +285,7 @@ $(document).ready(function() {
         
 
         page.appendChild(error_para);
-
+        errors = false;
         if (errors == false){
             $.ajax({
                 type: "POST", 
@@ -333,11 +328,6 @@ $(document).ready(function() {
                 }
                 });
             }
-            document.getElementById("new_username_input").value ="";
-            document.getElementById("new_firstname_input").value = "";
-            document.getElementById("new_lastname_input").value = "";
-            document.getElementById("new_email_input").value = "";
-            document.getElementById("new_password1_input").value = "";
-            document.getElementById("new_password2_input").value = "";
+
          });
 });
