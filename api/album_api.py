@@ -48,7 +48,7 @@ def album_route(albumid):
 		json_error = {
 			"errors":[
 						{
-							"message": "You did not provide the necessary fields"
+							"message": "The requested resource could not be found"
     					}
    	 				]
     	}
@@ -158,7 +158,6 @@ def album_route(albumid):
 		}
 
 	return jsonify(my_data)
-
 
 
 
