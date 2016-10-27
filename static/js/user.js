@@ -197,12 +197,7 @@ $(document).ready(function() {
         var password1 = document.getElementById("new_password1_input").value;
         var password2 = document.getElementById("new_password2_input").value;
 
-        document.getElementById("new_username_input").value ="";
-        document.getElementById("new_firstname_input").value = "";
-        document.getElementById("new_lastname_input").value = "";
-        document.getElementById("new_email_input").value = "";
-        document.getElementById("new_password1_input").value = "";
-        document.getElementById("new_password2_input").value = "";
+        
 
 
         var page = document.getElementById("content");
@@ -314,7 +309,7 @@ $(document).ready(function() {
                 success : function(data) {
                     console.log("it worked! post");
                     console.log(data);
-                    window.location.replace("http://localhost:3000/gu4wdnfe/p3/api/v1")
+                    window.location.replace("http://localhost:3000/gu4wdnfe/p3/login")
                     },
                 error : function(response) {
                     var response2 = JSON.parse(response.responseText);
@@ -338,5 +333,11 @@ $(document).ready(function() {
                 }
                 });
             }
+            document.getElementById("new_username_input").value ="";
+            document.getElementById("new_firstname_input").value = "";
+            document.getElementById("new_lastname_input").value = "";
+            document.getElementById("new_email_input").value = "";
+            document.getElementById("new_password1_input").value = "";
+            document.getElementById("new_password2_input").value = "";
          });
 });
