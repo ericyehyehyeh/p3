@@ -163,7 +163,7 @@
 						{% if 'username' in session %}
 							<li><a id="nav_edit" href="/gu4wdnfe/p3/user/edit">Edit Account</a></li>
 							<li><a id="nav_albums" href="/gu4wdnfe/p3/albums">My Albums</a></li>
-							<form action="/gu4wdnfe/p3/logout" method="POST">
+							<form id="logoutForm">
         					<input id="nav_logout" type="submit" value = "logout">
     						</form>
 						{% endif %}
@@ -199,7 +199,7 @@
 		</footer>
 
 		<script type="text/javascript" src="/static/js/main.js"></script>
-	
+		<script type="text/javascript" src="/static/js/logout.js"></script>
 	</body>
 </html>
 
