@@ -1,6 +1,5 @@
 $(document).ready(function() {
-
-    //returns -1 if string not found
+        //returns -1 if string not found
     var path = window.location.href.indexOf('albumid');
     var method = 'album';
     if (path == -1) {
@@ -8,15 +7,20 @@ $(document).ready(function() {
     }
 
     var id = window.location.href.split('=')[1];
+    var albumid = window.location.href.split('albumid=')[1];
+    var url = "http://localhost:3000/gu4wdnfe/p3/api/v1/"+method+"/"+albumid;
+    //alert(url);
 
     $.ajax({
         type: "GET", 
-        contentType: "application/json; charset=UTF-8",
-        data: JSON.stringify(), 
-        url: "http://localhost:3000/gu4wdnfe/p3/api/v1/"+method,
+        //contentType: "application/json; charset=UTF-8",
+        //data: JSON.stringify(), 
+        url: url,
         success : function(data) {
 
             if (method == 'album'){
+                data = JSON.parse(data);
+
 
                 var access = data['access']; 
                 var albumid = data['albumid'];
@@ -28,13 +32,18 @@ $(document).ready(function() {
 
 
                 var page_title = document.createElement("h3");
+                console.log("title: " + title + " access: " + access + " albumid: " + albumid + " created: " + created
+                             + " lastUpdated: " + lastupdated + " photos: " + photos + " username: " + username);
                 var album_title = document.createTextNode(title + "-" + username);
                 page_title.appendChild(album_title);
 
 
-                var album_edit = document.createElement("LINK");
-                var edit_link = document.createTextNode("/gu4wdnfe/p3/album/edit?albumid="+albumid);
-                album_edit.appendChild(edit_link);
+                var album_edit = document.createElement("a");
+                var link = "http://localhost:3000/gu4wdnfe/p3/album/edit?albumid="+albumid;
+                album_edit.href = link;
+                album_edit.innerHTML = "EDIT";
+                //var edit_link = document.createTextNode("http://localhost:3000/gu4wdnfe/p3/album/edit?albumid="+albumid);
+                //album_edit.appendChild(edit_link);
 
 
                 var page = document.getElementById("content");
@@ -42,7 +51,7 @@ $(document).ready(function() {
                 page.appendChild(album_edit);
 
                 for (i = 0; i < photos.length; i++){
-
+                    console.log("photo loaded")
                     var caption = photo['caption']; 
                     var sequencenum = photo['sequencenum'];
                     var picid = photo['picid'];
@@ -166,6 +175,7 @@ $(document).ready(function() {
         },
     
         error : function(response) {
+            console.log("test2 " + response.responseText);
             var code = response.status;
             var response = JSON.parse(response);
             var my_errors = response['errors'];
