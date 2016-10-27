@@ -8,7 +8,6 @@ import os#possibly delete
 album_api = Blueprint('album_api', __name__, template_folder='templates', url_prefix='/gu4wdnfe/p3')
 
 
-
 @album_api.route('/api/v1/album/<albumid>', methods=['GET'])
 def album_route(albumid):
 	print ("album api called with album " + albumid)
