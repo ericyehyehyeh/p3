@@ -4,7 +4,7 @@ $(document).ready(function() {
     //EDIT ROUTE
     $("#update_user").submit(function(event) {
         event.preventDefault();
-        var url = "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/api/v1/user";
+        var url = "http://localhost:3000/gu4wdnfe/p3/api/v1/user";
         $( ".error" ).remove();
 
 
@@ -124,7 +124,7 @@ $(document).ready(function() {
                             console.log("it worked! put");
                             console.log(data);
                             console.log("Successfully updated user information!")
-                            window.location.replace("http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/login");
+                            window.location.replace("http://localhost:3000/gu4wdnfe/p3/login");
                         },
 
                         error : function(response) {
@@ -187,7 +187,7 @@ $(document).ready(function() {
     $("#new_user").submit(function(event) {
 
         event.preventDefault();
-        var url = "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/api/v1/user";
+        var url = "http://localhost:3000/gu4wdnfe/p3/api/v1/user";
         $( ".error" ).remove();
 
         var username = document.getElementById("new_username_input").value;
@@ -306,15 +306,15 @@ $(document).ready(function() {
                     "lastname" :  document.getElementById("new_lastname_input").value,
                     "email" : document.getElementById("new_email_input").value,
                     "password1" : document.getElementById("new_password1_input").value,
-                    "password2" : document.getElementById("new_password2_input").value
+                    "password2" : document.getElementById("new_password2_input").value,
                 }), 
-                response: "application/json",
+                response: "application/json; charset=UTF-8",
                 url : url,
 
                 success : function(data) {
                     console.log("it worked! post");
                     console.log(data);
-                    window.location.replace("http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/api/v1")
+                    window.location.replace("http://localhost:3000/gu4wdnfe/p3/api/v1")
                     },
                 error : function(response) {
                     var response2 = JSON.parse(response.responseText);

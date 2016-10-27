@@ -2,8 +2,9 @@ $(document).ready(function() {
     var isFirstTime = true;
     
     window.onpopstate = function(event) {
-        if isFirstTime:
+        if (isFirstTime == true){
             history.replaceState({isFirstTime: "false"});
+        }
 
         event.preventDefault();
         //parse url to get values for ajax function
@@ -21,7 +22,7 @@ $(document).ready(function() {
         }
 
         //url for ajax is decided
-        var url = "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/api/v1/"+method+"/"+albumid;
+        var url = "http://localhost:3000/gu4wdnfe/p3/api/v1/"+method+"/"+albumid;
 
         //fill page with ajax
         alert("got here");
@@ -53,7 +54,7 @@ $(document).ready(function() {
 
                     //fill in edit link
                     var album_edit = document.createElement("a");
-                    var link = "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/album/edit?albumid="+albumid;
+                    var link = "http://localhost:3000/gu4wdnfe/p3/album/edit?albumid="+albumid;
                     album_edit.href = link;
                     album_edit.innerHTML = "EDIT<br>";
 
@@ -83,7 +84,7 @@ $(document).ready(function() {
                         //TODO: add onlick function to go to next state
                         image_element.onclick = function() {
                             /*******      TO DO     ************/
-                            window.history.pushState(,"pic","/gu4wdnfe/p3/pic?picid=" + picid);
+                            window.history.pushState("pic","/gu4wdnfe/p3/pic?picid=" + picid);
                             window.history.forward();
                         }
 
@@ -172,7 +173,7 @@ $(document).ready(function() {
                                 "next": next, 
                                 "prev": prev
                             }), 
-                            url: "http://class3.eecs.umich.edu/gu4wdnfe/p3/api/v1/pic/"+picid,
+                            url: "http://localhost:3000/gu4wdnfe/p3/api/v1/pic/"+picid,
                             success : function(data) {
                                 },
                             error : function(response) {

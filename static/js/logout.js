@@ -2,14 +2,14 @@ $(document).ready(function() {
 
     $("#logoutForm").submit(function(event) {
     event.preventDefault();
-    var url = "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/api/v1/logout";
+    var url = "http://localhost:3000/gu4wdnfe/p3/api/v1/logout";
     $.ajax({
         type: "POST", 
         contentType: "application/json; charset=UTF-8",
         data: JSON.stringify(),
         url: url,
         success : function(data) {
-            window.location.replace("http://class3.eecs.umich.edu:4550/gu4wdnfe/p3");
+            window.location.replace("http://localhost:3000/gu4wdnfe/p3");
             },
         error : function(response) {
             var response = JSON.parse(response);
