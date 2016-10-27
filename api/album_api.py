@@ -123,8 +123,14 @@ def album_route(albumid):
 		edit[0]['caption'] = my_caption
 		edit[0]['albumid'] = albumid
 		edit[0]['sequencenum'] = my_sequencenum
-		new_edit = edit[0]
-
+		new_edit = {
+			"albumid": albumid,
+			"caption": my_caption,
+			"date": edit[0]['date'],
+			"format":edit[0]['format'],
+			"picid": edit[0]['picid'],
+			"sequencenum": my_sequencenum
+		}
 		pic_format.append(new_edit)
 
 		
@@ -147,7 +153,7 @@ def album_route(albumid):
 		"albumid": albumid,
 		"created": created,
 		"lastupdated": lastupdated,
-		"pics": new_edit,
+		"pics": pic_format,
 		"title": title,
 		"username": current_username
 		}
