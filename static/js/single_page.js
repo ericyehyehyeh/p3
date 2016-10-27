@@ -299,13 +299,13 @@ function loadURL() {
 
 
 
-/*
-function onclickFunc(newURL) {
-    window.history.pushState({},"test",window.location.href);
-    window.history.replaceState({},"pic",newURL);
-    window.history.go(0);
-}
-*/
+
+
+
+
+
+
+
 
 
 
