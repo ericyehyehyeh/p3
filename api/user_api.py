@@ -121,26 +121,6 @@ def user_route():
 		if not re.match("^[\w\d_]*$", username):
 			errors.append({"message": "Passwords may only contain letters, digits, and underscores"})
 			error = True
-
-
-
-		print "error checking 2"
-		
-			
-
-		print "error checking 3"
-		
-
-		print "error checking 4"
-		
-
-		print "error checking 5"
-		
-
-		print "error checking 6"
-		
-
-		print "error checking 7"
 		if len(email) > 40:
 			errors.append({"message": "Email must be no longer than 40 characters"})
 			error = True
