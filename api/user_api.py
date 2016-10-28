@@ -134,7 +134,7 @@ def user_route():
 		if len(username) < 3:
 			errors.append({"message": "Usernames must be at least 3 characters long"})
 			error = True
-		if not re.match("^[\w\d_]*$", password1):
+		if not re.match("^[\w\d_]*$", username):
 			errors.append({"message": "Usernames may only contain letters, digits, and underscores"})
 			error = True
 		if len(password1) < 8:
@@ -143,7 +143,7 @@ def user_route():
 		if not re.match("^(?=.*[a-zA-z])(?=.*\d)", password1):
 			errors.append({"message": "Passwords must contain at least one letter and one number"})
 			error = True
-		if not re.match("^[\w\d_]*$", username):
+		if not re.match("^[\w\d_]*$", password1):
 			errors.append({"message": "Passwords may only contain letters, digits, and underscores"})
 			error = True
 		if len(email) > 40:

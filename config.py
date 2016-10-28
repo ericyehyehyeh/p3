@@ -7,9 +7,10 @@ env = dict(
 	user = 'group23', 
 	password = 'jag_password',
 	db = 'group23db'
-# 	host = '0.0.0.0',
-# 	port = 3000,
-# 	user = 'root', 
-# 	password = 'root',
-# 	db = 'group23db',
+	#host = '0.0.0.0',
+	#port = 3000,
+	#user = 'root', 
+	#password = 'root',
+	#db = 'group23db',
 )
+
