@@ -87,8 +87,8 @@ function loadURL() {
     //alert("got here");
     $.ajax({
         type: "GET", 
-        //contentType: "application/json; charset=UTF-8",
-        //data: JSON.stringify(), 
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify(), 
         url: url,
         success : function(data) {
             if (method == 'album'){

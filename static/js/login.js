@@ -1,7 +1,7 @@
 $(document).ready(function() {
     $("#loginForm").submit(function(event) {
     event.preventDefault();
-    var url = "http://localhost:3000/gu4wdnfe/p3/api/v1/login";
+    var url = "http://class3.eecs.umich.edu:4550/gu4wdnfe/p3/api/v1/login";
     document.getElementById("error").innerHTML = "";
 
     $.ajax({
@@ -18,7 +18,7 @@ $(document).ready(function() {
             var link = "";
             if (query == -1){
                 console.log("if");
-                window.location.replace("http://localhost:3000/gu4wdnfe/p3")
+                window.location.replace("http://class3.eecs.umich.edu:4550/gu4wdnfe/p3")
             }
             else{
                 console.log("else");
